@@ -1065,6 +1065,51 @@ async function hapusData(id) {
 }
 const hapusGanda = id => hapusData(id);
 
+
+/* ---------- Ubah Data & Ubah Password (user dan caleg) ---------- */
+function footAkun(peran, fnUbah) {
+  const eye = id => `<button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('${id}',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button>`;
+  return `<div class="grid grid-cols-2 gap-2">
+      <button type="button" class="btn btn-b" onclick="${fnUbah}()"><i class="fa-solid fa-pen-to-square mr-2"></i>Ubah Data</button>
+      <button type="button" id="fpBtn-${peran}" class="btn btn-b" aria-expanded="false" onclick="togglePass('${peran}')"><i class="fa-solid fa-key mr-2"></i>Password</button>
+    </div>
+    <form id="fp-${peran}" class="hidden mt-4 space-y-3" onsubmit="simpanPassword(event,'${peran}')" autocomplete="off">
+      <div><label class="text-sm font-semibold">Password lama</label>
+        <div class="relative"><input name="lama" id="fpLama-${peran}" type="password" class="inp pr-11" autocomplete="current-password" required>${eye('fpLama-' + peran)}</div></div>
+      <div><label class="text-sm font-semibold">Password baru <span class="font-normal text-slate-500">(min. 6 karakter)</span></label>
+        <div class="relative"><input name="baru" id="fpBaru-${peran}" type="password" class="inp pr-11" autocomplete="new-password" minlength="6" required>${eye('fpBaru-' + peran)}</div></div>
+      <p data-msg class="text-sm text-red-600"></p>
+      <button class="btn w-full"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan Password</button>
+    </form>`;
+}
+function togglePass(peran) {
+  const f = $('fp-' + peran), b = $('fpBtn-' + peran), buka = f.classList.contains('hidden');
+  f.classList.toggle('hidden', !buka); b.setAttribute('aria-expanded', buka);
+  if (buka) f.elements['lama'].focus(); else { f.reset(); f.querySelector('[data-msg]').textContent = ''; }
+}
+async function simpanPassword(e, peran) {
+  e.preventDefault();
+  const f = e.target, msgEl = f.querySelector('[data-msg]'), lama = f.elements['lama'].value, baru = f.elements['baru'].value;
+  msgEl.textContent = '';
+  if (lama !== S.pass) return msgEl.textContent = 'Password lama salah.';
+  if (baru.length < 6) return msgEl.textContent = 'Password baru minimal 6 karakter.';
+  if (baru === lama) return msgEl.textContent = 'Password baru harus berbeda dari password lama.';
+  const b = f.querySelector('button:not([type])'); b.disabled = true;
+  try {
+    const ok = peran === 'caleg'
+      ? await rpc('caleg_ubah_password', { p_id: S.id, p_pass: lama, p_baru: baru })
+      : await rpc('user_ubah_password', { p_hp: S.hp, p_pass: lama, p_baru: baru });
+    if (ok === false) { msgEl.textContent = 'Password lama salah.'; b.disabled = false; return; }
+    await notif('Password berhasil diubah. Aplikasi akan dimulai ulang, silakan masuk dengan password baru.', 'Password diubah', 'info');
+    keluar();   // sesi dihapus dan aplikasi dimuat ulang -> login dengan password baru
+  } catch (er) {
+    const t = String(er.message || '') + String(er.code || '');
+    msgEl.textContent = /Could not find the function|PGRST202/i.test(t) ? 'Fitur ubah password belum aktif di database.'
+      : /Akses ditolak/i.test(t) ? 'Password lama salah.' : 'Gagal mengubah password: ' + (er.message || '');
+    b.disabled = false;
+  }
+}
+
 /* ---------- Data Diri Caleg ---------- */
 let CPROF = null;
 async function loadCaleg() {
@@ -1073,16 +1118,67 @@ async function loadCaleg() {
 }
 function isiDiriCaleg() {
   const p = CPROF, host = $('a-diri'); if (!host) return;
-  const foto = p && p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-slate-200">`
-    : '<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-4xl"><i class="fa-solid fa-user"></i></div>';
-  const isi = p ? [['Nama', p.nama], ['No. HP', p.no_hp], ['Email', p.email], ['Dapil', p.dapil], ['Partai', p.partai]]
-      .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
-    : '<p class="col-span-3 text-slate-500">Memuat data...</p>';
-  host.innerHTML = `<div class="bg-white rounded-2xl shadow overflow-hidden">
+  // Kerangka (termasuk panel password yang bisa sedang terbuka) dibuat sekali; pembaruan data hanya mengganti foto dan isi
+  if (!$('cdIsi')) host.innerHTML = `<div class="bg-white rounded-2xl shadow overflow-hidden">
     <div class="bg-gradient-to-br from-sky-600 to-sky-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-id-card mr-2"></i>Data Calon Legislatif</h2></div>
     <div class="px-4 py-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
-      <div class="shrink-0">${foto}</div>
-      <dl class="grid grid-cols-3 gap-y-3 text-sm w-full">${isi}</dl></div></div>`;
+      <div id="cdFoto" class="shrink-0"></div>
+      <dl id="cdIsi" class="grid grid-cols-3 gap-y-3 text-sm w-full"></dl></div>
+    <div class="px-4 py-4 border-t border-slate-100">${footAkun('caleg', 'ubahDiriCaleg')}</div></div>`;
+  $('cdFoto').innerHTML = p && p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-slate-200">`
+    : '<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-4xl"><i class="fa-solid fa-user"></i></div>';
+  $('cdIsi').innerHTML = p ? [['Nama', p.nama], ['No. HP', p.no_hp], ['Email', p.email], ['Dapil', p.dapil], ['Partai', p.partai]]
+      .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
+    : '<p class="col-span-3 text-slate-500">Memuat data...</p>';
+}
+// Ubah Data caleg: nama, email, dapil, partai, foto (No. HP adalah akun masuk sehingga tidak diubah di sini)
+function ubahDiriCaleg() {
+  const p = CPROF; if (!p) return;
+  const m = $('modal'); let foto = p.foto || '';
+  const DAPIL = ['Kadia/Wua-Wua'], lain = !!p.dapil && !DAPIL.includes(p.dapil);
+  m.innerHTML = `<form class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-5 space-y-3">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-lg">Ubah Data Calon Legislatif</h3><button type="button" data-x class="text-slate-500 text-xl">&times;</button></div>
+    <div><label class="text-sm font-semibold">Foto</label>
+      <div class="flex items-center gap-3 mt-1"><div id="cFotoPrev" class="w-20 h-20 shrink-0 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 overflow-hidden">${foto ? `<img src="${esc(foto)}" alt="" class="w-full h-full object-cover">` : '<i class="fa-solid fa-user text-2xl"></i>'}</div>
+      <input id="cFoto" type="file" accept="image/*" class="text-sm flex-1 min-w-0"></div></div>
+    <div><label class="text-sm font-semibold">Nama</label><input name="nama" class="inp" value="${esc(p.nama || '')}" required></div>
+    <div><label class="text-sm font-semibold">No. HP</label><input class="inp bg-slate-100" value="${esc(p.no_hp || '')}" readonly></div>
+    <div><label class="text-sm font-semibold">Email</label><input name="email" type="email" class="inp" value="${esc(p.email || '')}" required></div>
+    <div><label class="text-sm font-semibold">Daerah Pemilihan</label>
+      <select name="dapil_pilih" class="inp" required><option value="">Pilih...</option>${DAPIL.map(d => `<option ${p.dapil === d ? 'selected' : ''}>${d}</option>`).join('')}<option value="__lain" ${lain ? 'selected' : ''}>Lainnya...</option></select>
+      <input name="dapil_lain" class="inp mt-2 ${lain ? '' : 'hidden'}" placeholder="Tulis daerah pemilihan" value="${lain ? esc(p.dapil) : ''}" ${lain ? 'required' : ''}></div>
+    <div><label class="text-sm font-semibold">Partai</label><input name="partai" class="inp" value="${esc(p.partai || '')}" required></div>
+    <p data-msg class="text-sm text-red-600"></p>
+    <button class="btn w-full">Simpan</button></form>`;
+  m.classList.remove('hidden'); m.classList.add('flex');
+  const f = m.querySelector('form'), msgEl = f.querySelector('[data-msg]');
+  f.querySelector('[data-x]').onclick = closeForm;
+  f.elements['dapil_pilih'].onchange = () => {
+    const l = f.elements['dapil_pilih'].value === '__lain', el = f.elements['dapil_lain'];
+    el.classList.toggle('hidden', !l); el.required = l; if (l) el.focus(); else el.value = '';
+  };
+  $('cFoto').onchange = async e => {
+    const file = e.target.files[0]; msgEl.textContent = '';
+    if (!file) return;
+    try { foto = await bacaFoto(file); $('cFotoPrev').innerHTML = `<img src="${foto}" alt="" class="w-full h-full object-cover">`; }
+    catch (er) { msgEl.textContent = er.message; e.target.value = ''; }
+  };
+  f.onsubmit = async e => {
+    e.preventDefault(); msgEl.textContent = '';
+    const o = Object.fromEntries(new FormData(f).entries());
+    ['nama', 'email', 'dapil_lain', 'partai'].forEach(k => { if (typeof o[k] === 'string') o[k] = o[k].trim(); });
+    const dapil = o.dapil_pilih === '__lain' ? o.dapil_lain : o.dapil_pilih;
+    if (!dapil) return msgEl.textContent = 'Daerah pemilihan wajib diisi.';
+    const b = f.querySelector('button:not([type])'); b.disabled = true;
+    try {
+      await rpc('caleg_simpan_diri', { ...ap(), p: { nama: o.nama, email: o.email, dapil, partai: o.partai, foto } });
+      await loadCaleg(); closeForm(); toast('Data berhasil disimpan');
+    } catch (er) {
+      const t = String(er.message || '') + String(er.code || '');
+      msgEl.textContent = /Could not find the function|PGRST202/i.test(t) ? 'Fitur ubah data caleg belum aktif di database.' : 'Gagal menyimpan: ' + (er.message || '');
+      b.disabled = false;
+    }
+  };
 }
 
 /* ---------- ADMIN UTAMA: Registrasi Caleg ---------- */
@@ -1454,7 +1550,7 @@ const SHEETS = {
   diri: {
     judul: 'Data Diri', ikon: 'fa-id-card',
     body: () => '<dl id="diri" class="grid grid-cols-3 gap-y-3 text-sm"></dl>',
-    foot: '<button type="button" class="btn btn-b w-full" onclick="ubahDiri()"><i class="fa-solid fa-pen-to-square mr-2"></i>Ubah</button>',
+    foot: footAkun('user', 'ubahDiri'),
     init: () => isiDiri()
   },
   jumlah: {
