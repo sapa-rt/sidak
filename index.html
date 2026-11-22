@@ -18,6 +18,16 @@
   @media (min-width:768px){html{font-size:106.25%}}    /* tablet */
   @media (min-width:1024px){html{font-size:112.5%}}    /* tablet landscape / laptop */
   @media (min-width:1440px){html{font-size:118.75%}}   /* PC layar lebar */
+  .hdr-img{right:1rem}
+  @media (min-width:768px){.hdr-img{right:1.5rem}}
+  @media (min-width:1024px){.hdr-img{right:2rem}}
+  .hdr.has-caleg .hdr-img{right:7rem}
+  @media (min-width:768px){.hdr.has-caleg .hdr-img{right:8.5rem}}
+  @media (min-width:1024px){.hdr.has-caleg .hdr-img{right:9.5rem}}
+  .ic-diri{width:2.25rem;height:2.25rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1}
+  .ic-diri:hover{background:#bae6fd}
+  .ic-diri.aktif{background:#0284c7;color:#fff}
+  .ic-diri:focus-visible{outline:2px solid #1d4ed8;outline-offset:2px}
   .hdr{background:linear-gradient(110deg,#0a2463 0%,#1d4ed8 55%,#60a5fa 100%)}
   .inp{width:100%;border:1px solid #cbd5e1;border-radius:.6rem;padding:.6rem .8rem;outline:none;background:#fff}
   .inp:focus{border-color:#1d4ed8;box-shadow:0 0 0 3px #1d4ed833}
@@ -171,18 +181,20 @@
 <!-- C. ADMIN -->
 <section id="v-admin" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
-  <main class="w-full max-w-5xl mx-auto flex-1 p-4 md:px-8 lg:px-10 space-y-7">
+  <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-7">
     <div>
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
-        <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+        <div class="flex items-center gap-2">
+          <button type="button" class="ic-diri" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')" title="Data Calon Legislatif" aria-label="Data Calon Legislatif"><i class="fa-solid fa-id-card"></i></button>
+          <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
       </div>
-      <div class="grid grid-cols-5 gap-1.5">
-        <button type="button" class="fitur" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')"><span class="fitur-ic bg-gradient-to-br from-sky-600 to-sky-400"><i class="fa-solid fa-id-card"></i></span><span class="fitur-lb">Data Diri</span></button>
+      <div class="grid grid-cols-4 gap-1.5">
         <button type="button" class="fitur" data-fitur="kelola" aria-pressed="false" onclick="pilihFiturAdmin('kelola')"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-users-gear"></i></span><span class="fitur-lb">Kelola Pendata</span></button>
-        <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Data Konstituen</span></button>
-        <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Data Statistik</span></button>
-        <button type="button" class="fitur" data-fitur="cetak" aria-pressed="false" onclick="pilihFiturAdmin('cetak')"><span class="fitur-ic bg-gradient-to-br from-green-700 to-green-500"><i class="fa-solid fa-download"></i></span><span class="fitur-lb">Unduh Data</span></button>
+        <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Konstituen</span></button>
+        <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Statistik</span></button>
+        <button type="button" class="fitur" data-fitur="cetak" aria-pressed="false" onclick="pilihFiturAdmin('cetak')"><span class="fitur-ic bg-gradient-to-br from-green-700 to-green-500"><i class="fa-solid fa-download"></i></span><span class="fitur-lb">Unduh Laporan</span></button>
       </div>
     </div>
 
@@ -235,7 +247,7 @@
 
     <!-- Cetak Data (Unduh Data) -->
     <section id="a-cetak" class="hidden"><div class="bg-white rounded-2xl shadow overflow-hidden">
-      <div class="bg-gradient-to-br from-green-700 to-green-500 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-download mr-2"></i>Unduh Data</h2></div>
+      <div class="bg-gradient-to-br from-green-700 to-green-500 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-download mr-2"></i>Unduh Laporan</h2></div>
       <div class="px-4 py-4">
       <div class="grid sm:grid-cols-3 gap-2">
         <select id="by" class="inp" onchange="fillVal()">
@@ -260,7 +272,7 @@
 <!-- C2. ADMIN UTAMA (hanya Registrasi Caleg) -->
 <section id="v-utama" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
-  <main class="w-full max-w-5xl mx-auto flex-1 p-4 md:px-8 lg:px-10 space-y-5">
+  <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-5">
     <div class="flex items-center justify-between">
       <h2 class="font-bold"><i class="fa-solid fa-user-shield text-blue-700 mr-2"></i>Admin Utama</h2>
       <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
@@ -285,7 +297,7 @@
 <!-- D. USER -->
 <section id="v-user" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
-  <main class="w-full max-w-5xl mx-auto flex-1 p-4 md:px-8 lg:px-10 space-y-7">
+  <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-7">
     <div>
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
@@ -359,17 +371,43 @@ let ADATA = [], UDATA = [], PROFIL = null;
 document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
 
 /* ---------- Header + jam ---------- */
-function headerHTML(tgl = true, mw = 'max-w-5xl') {
+function headerHTML(tgl = true, mw = 'max-w-none') {
   return `<header class="hdr relative overflow-hidden text-white">
-    <img src="${HEADER_IMG_URL}" alt="" class="absolute right-0 top-0 h-full w-auto max-w-[55%] object-contain object-right opacity-90 pointer-events-none"
+    <img src="${HEADER_IMG_URL}" alt="" class="hdr-img absolute top-0 h-full w-auto max-w-[45%] object-contain object-right opacity-90 pointer-events-none"
          style="-webkit-mask-image:linear-gradient(to left,#000 40%,transparent);mask-image:linear-gradient(to left,#000 40%,transparent)">
-    <div class="relative ${mw} mx-auto px-4 md:px-8 lg:px-10 pt-1 pb-4 flex flex-col items-start text-left gap-1">
-      <span class="inline-flex items-center justify-center w-16 h-16 -mt-1"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
-      <p class="font-bold text-sm sm:text-base leading-tight">Sistem Informasi Data Konstituen</p>
-      ${tgl ? '<p class="js-date text-xs sm:text-sm text-blue-100"></p>' : ''}
+    <div class="relative ${mw} mx-auto px-4 md:px-6 lg:px-8 pt-1 pb-4 flex items-start justify-between gap-3">
+      <div class="flex flex-col items-start text-left gap-1 min-w-0">
+        <span class="inline-flex items-center justify-center w-16 h-16 -mt-1"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
+        <p class="font-bold text-sm sm:text-base leading-tight">Sistem Informasi Data Konstituen</p>
+        ${tgl ? '<p class="js-date text-xs sm:text-sm text-blue-100"></p>' : ''}
+      </div>
+      <div class="js-caleg shrink-0"></div>
     </div></header>`;
 }
+// Foto + nama caleg di header (halaman Caleg dan User)
+function setCalegHeader(p) {
+  const ada = !!(p && (p.nama || p.foto));
+  document.querySelectorAll('.js-caleg').forEach(el => {
+    el.innerHTML = !ada ? '' : `<div class="flex flex-col items-center gap-1 w-[5.5rem] sm:w-24 md:w-28 pt-2">
+      ${p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-white shadow-lg">`
+        : '<span class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/20 border-2 border-white flex items-center justify-center text-xl"><i class="fa-solid fa-user"></i></span>'}
+      <p class="text-xs font-bold text-center leading-tight line-clamp-2">${esc(p.nama || '')}</p></div>`;
+  });
+  document.querySelectorAll('.hdr').forEach(h => h.classList.toggle('has-caleg', ada));
+}
 document.querySelectorAll('.js-header').forEach(h => h.innerHTML = headerHTML());   // tanggal di header hanya untuk User; di Admin tanggal + Keluar ada di badan halaman
+/* NIK: tampil bintang (asterisk) secara default, ikon mata untuk melihat/menyembunyikan */
+const NIK_MASK = '****************';
+function nikMask(nik) {
+  if (!nik) return '-';
+  return `<span class="inline-flex items-center gap-2"><span data-nik="${esc(nik)}" class="tabular-nums tracking-wider">${NIK_MASK}</span><button type="button" onclick="toggleNik(this)" class="text-slate-500 hover:text-slate-800 p-1" aria-label="Lihat NIK" title="Lihat NIK"><i class="fa-regular fa-eye"></i></button></span>`;
+}
+function toggleNik(b) {
+  const t = b.previousElementSibling, buka = t.dataset.show !== '1';
+  t.textContent = buka ? t.dataset.nik : NIK_MASK; t.dataset.show = buka ? '1' : '0';
+  b.firstElementChild.className = buka ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+  b.setAttribute('aria-label', buka ? 'Sembunyikan NIK' : 'Lihat NIK'); b.title = buka ? 'Sembunyikan NIK' : 'Lihat NIK';
+}
 function tick() {
   const d = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   document.querySelectorAll('.js-date').forEach(e => e.textContent = d);
@@ -559,6 +597,7 @@ function openForm({ title, keys, vals = {}, readonly = [], closable = true, dua 
     pasangX(nikEl, 'Hapus NIK');
     f._xupd = nikEl._xupd;
   }
+  if (nikEl && nikEl.value) pasangMata(nikEl);
   f.onsubmit = async e => {
     e.preventDefault();
     const lanjut = dua && e.submitter && e.submitter.value === 'tambah';
@@ -626,6 +665,18 @@ function pasangCariNik(f, bertahap) {
   };
   el.addEventListener('input', cek);
   if (el.value.length === 16) cek();
+}
+// Isian NIK yang sudah berisi (mode ubah) tampil bintang; ikon mata untuk melihatnya
+function pasangMata(el) {
+  let w = el.parentNode;
+  if (!w.classList.contains('relative')) { w = document.createElement('div'); w.className = 'relative'; el.parentNode.insertBefore(w, el); w.appendChild(el); }
+  el.type = 'password'; el.autocomplete = 'off'; el.classList.add('pr-20');
+  const b = document.createElement('button'); b.type = 'button';
+  b.className = 'absolute right-9 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800';
+  const ikon = () => { const sembunyi = el.type === 'password'; b.innerHTML = `<i class="fa-regular ${sembunyi ? 'fa-eye' : 'fa-eye-slash'}"></i>`; b.setAttribute('aria-label', sembunyi ? 'Lihat NIK' : 'Sembunyikan NIK'); };
+  b.onclick = () => { el.type = el.type === 'password' ? 'text' : 'password'; ikon(); };
+  el.addEventListener('input', () => { if (!el.value) { el.type = 'text'; ikon(); } });
+  w.appendChild(b); ikon();
 }
 function closeForm() { $('modal').classList.add('hidden'); $('modal').classList.remove('flex'); $('modal').innerHTML = ''; }
 
@@ -937,7 +988,7 @@ function renderLihatInline() {
 }
 const BARIS_LIHAT = [
   ['Nama', d => `<span class="font-semibold">${esc(d.nama)}</span>`],
-  ['NIK', d => esc(d.nik)],
+  ['NIK', d => nikMask(d.nik)],
   ['Hubungan', d => esc(d.hubungan || (d.is_diri ? 'Data diri' : '-'))],
   ['Potensi', d => `<span class="rounded-full text-xs font-semibold px-2.5 py-1 ${POTC[d.potensi] || ''}">${esc(d.potensi)}</span>`],
   ['Pendata', d => esc(d.pendata_nama || '')],
@@ -987,7 +1038,7 @@ async function hapusData(id) {
   const d = ADATA.find(x => x.id === id); if (!d) return;
   const alasan = d.ganda ? 'Ganda' : 'Prioritas ' + (d.potensi || '-');
   const ok = await konfirmasi({ judul: 'Hapus data?', tipe: 'bahaya', tombol: 'Ya, hapus',
-    pesan: 'Data "' + d.nama + '" (NIK ' + d.nik + ') dari ' + (d.pendata_nama || 'pendata') + ' akan dihapus dengan alasan: ' + alasan + '. '
+    pesan: 'Data "' + d.nama + '" (NIK ' + NIK_MASK + ') dari ' + (d.pendata_nama || 'pendata') + ' akan dihapus dengan alasan: ' + alasan + '. '
       + (d.potensi === 'Tinggi' ? 'Data prioritas Tinggi dapat dikembalikan oleh pendata lewat History.' : 'Data ini hanya tercatat di History pendata dan tidak bisa dikembalikan.')
       + (d.unggul ? ' Perhatian: data ini memiliki prioritas lebih baik dari data ganda lainnya, hapus hanya bila memang keliru.' : '') });
   if (!ok) return;
@@ -1005,7 +1056,7 @@ const hapusGanda = id => hapusData(id);
 /* ---------- Data Diri Caleg ---------- */
 let CPROF = null;
 async function loadCaleg() {
-  try { CPROF = await rpc('caleg_profil', ap()); if (AFITUR === 'diri') isiDiriCaleg(); }
+  try { CPROF = await rpc('caleg_profil', ap()); setCalegHeader(CPROF); if (AFITUR === 'diri') isiDiriCaleg(); }
   catch (e) { if (String(e.message || '').includes('Akses ditolak')) notif('Sesi tidak valid atau sudah berakhir. Silakan masuk kembali.', 'Sesi berakhir').then(keluar); }
 }
 function isiDiriCaleg() {
@@ -1358,11 +1409,12 @@ function cetakPendata(id) {
 
 /* ---------- USER ---------- */
 const ua = () => ({ p_hp: S.hp, p_pass: S.pass });
-let SUM = null, SHEET = '', SEKSI = '';
+let SUM = null, SHEET = '', SEKSI = '', UHDR = null;
 async function loadUser(silent) {
   try {
     PROFIL = await rpc('user_profil', ua());
     if (!PROFIL.nik && $('modal').classList.contains('hidden')) ubahDiri(false);
+    if (!UHDR) rpc('user_caleg', ua()).then(c => { UHDR = c; setCalegHeader(c); }).catch(() => {});   // foto & nama caleg di header
     SUM = await rpc('user_ringkasan', ua());
     UDATA = await rpc('user_data', ua());
     renderSheet();   // perbarui isi modal yang sedang terbuka (bila ada)
@@ -1475,7 +1527,7 @@ function isiDiri() {
   const jk = p.jenis_kelamin === 'L' ? 'Laki-laki' : p.jenis_kelamin === 'P' ? 'Perempuan' : '-';
   el.innerHTML = [['Nama',p.nama],['NIK',p.nik],['Jenis kelamin',jk],['No. HP',p.no_hp],['Alamat',p.alamat],
     ['Kelurahan',p.kelurahan],['Kecamatan',p.kecamatan],['No. TPS',p.no_tps]]
-    .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold">${esc(v || '-')}</dd>`).join('');
+    .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold">${k === 'NIK' ? nikMask(v) : esc(v || '-')}</dd>`).join('');
 }
 // Mengisi nilai batang; dipanggil ulang saat data diperbarui sehingga batang bergeser mulus tanpa diulang dari nol
 function isiJumlah() {
