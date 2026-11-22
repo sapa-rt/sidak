@@ -37,7 +37,7 @@
   @media (min-width:768px){.cal-foto,.cal-ikon{width:13rem}.cal-nama{right:1.5rem;bottom:.9rem;font-size:1.15rem}}
   @media (min-width:1024px){.cal-foto,.cal-ikon{width:15rem}.cal-nama{right:2rem;bottom:1rem;font-size:1.3rem}}
   /* Chart Jumlah Data di header (Caleg & User) */
-  .hdr-ring-box{width:4.75rem;height:4.75rem;flex:none}
+  .hdr-ring-box{width:4.25rem;height:4.25rem;flex:none}
   .hdr-ring-n{font-size:1.15rem;line-height:1;text-shadow:0 1px 3px rgba(10,36,99,.6)}
   .hdr-ring-l{font-size:.55rem;line-height:1.2;opacity:.85}
   @media (min-width:768px){.hdr-ring-box{width:5.75rem;height:5.75rem}.hdr-ring-n{font-size:1.35rem}.hdr-ring-l{font-size:.6rem}}
@@ -397,16 +397,18 @@ document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
 
 /* ---------- Header + jam ---------- */
 // Chart lingkaran Jumlah Data (Laki-laki / Perempuan) untuk header Caleg & User; diisi oleh isiRingHeader()
-const HDR_SEG = [['Laki', 'Laki-laki', '#38bdf8'], ['Perempuan', 'Perempuan', '#f472b6']];
+const HDR_SEG = [['Laki', 'Laki-laki', '#38bdf8', 'fa-mars'], ['Perempuan', 'Perempuan', '#f472b6', 'fa-venus']];
 function hdrRingHTML() {
-  return `<div class="hdr-ring flex items-center gap-3" role="img" aria-label="Jumlah data: 0">
+  return `<div class="hdr-ring flex items-center gap-3 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:gap-4" role="img" aria-label="Jumlah data: 0">
     <div class="hdr-ring-box relative">
       <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90" aria-hidden="true">
         <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="16"/>
         ${HDR_SEG.map(([k, , c]) => `<circle data-seg="${k}" cx="60" cy="60" r="48" fill="none" stroke="${c}" stroke-width="16" style="stroke-dasharray:0 301.6;transition:stroke-dasharray .9s ease,stroke-dashoffset .9s ease"/>`).join('')}
       </svg>
-      <div class="absolute inset-0 flex flex-col items-center justify-center"><span data-total class="hdr-ring-n font-extrabold">0</span><span class="hdr-ring-l">Jumlah data</span></div>
+      <div class="absolute inset-0 flex flex-col items-center justify-center"><span data-total class="hdr-ring-n font-extrabold">0</span><span class="hdr-ring-l hidden md:block">Jumlah data</span></div>
     </div>
+    <div class="md:hidden text-sm font-bold space-y-1.5">${HDR_SEG.map(([k, , c, ic]) =>
+      `<p class="flex items-center gap-1.5 leading-none"><i class="fa-solid ${ic} w-4 text-center text-base" style="color:${c}"></i><b data-n="${k}">0</b></p>`).join('')}</div>
     <div class="hidden md:block text-xs space-y-1">${HDR_SEG.map(([k, lb, c]) =>
       `<p class="flex items-center gap-1.5 whitespace-nowrap"><span class="inline-block w-2.5 h-2.5 rounded-full" style="background:${c}"></span>${lb} <b data-n="${k}">0</b></p>`).join('')}</div>
   </div>`;
@@ -422,7 +424,7 @@ function isiRingHeader() {
     HDR_SEG.forEach(([k]) => {
       const len = t ? c[k] / t * C : 0, o = el.querySelector(`circle[data-seg="${k}"]`);
       o.style.strokeDasharray = len + ' ' + (C - len); o.style.strokeDashoffset = -off; off += len;
-      el.querySelector(`[data-n="${k}"]`).textContent = c[k];
+      el.querySelectorAll(`[data-n="${k}"]`).forEach(n => n.textContent = c[k]);
     });
     const n = el.querySelector('[data-total]'); n.textContent = t; n.style.fontSize = String(t).length >= 5 ? '.85rem' : '';
     el.setAttribute('aria-label', 'Jumlah data: ' + t + ' (Laki-laki ' + c.Laki + ', Perempuan ' + c.Perempuan + ')');
@@ -430,11 +432,11 @@ function isiRingHeader() {
 }
 function headerHTML(utama = false, mw = 'max-w-none') {
   // Gambar Cloudinary hanya dipakai di header Admin Utama; halaman Caleg & User memakai foto caleg (lihat setCalegHeader)
-  return `<header class="hdr relative overflow-hidden text-white">
+  return `<header class="hdr relative overflow-hidden text-white flex flex-col">
     ${utama ? `<img src="${HEADER_IMG_URL}" alt="" class="hdr-img absolute top-0 h-full w-auto max-w-[45%] object-contain object-right opacity-90 pointer-events-none"
          style="-webkit-mask-image:linear-gradient(to left,#000 40%,transparent);mask-image:linear-gradient(to left,#000 40%,transparent)">` : ''}
-    <div class="relative ${mw} mx-auto px-4 md:px-6 lg:px-8 pt-3 pb-5 md:pt-4 md:pb-6 flex items-start justify-between gap-3">
-      <div class="flex items-center gap-3 md:gap-5">
+    <div class="relative ${mw} w-full flex-1 mx-auto px-4 md:px-6 lg:px-8 pt-3 pb-4 md:pt-4 md:pb-6 flex items-start justify-between gap-3">
+      <div class="flex flex-col items-start gap-1">
         <span class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
         ${utama ? '' : hdrRingHTML()}
       </div>
@@ -1119,16 +1121,18 @@ function footAkun(peran) {
   const eye = id => `<button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('${id}',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button>`;
   const kolom = (nm, lb, ac, extra = '') => `<div><label class="text-sm font-semibold">${lb}</label>
         <div class="relative"><input name="${nm}" id="fp-${nm}-${peran}" type="password" class="inp pr-11" autocomplete="${ac}" ${extra} required>${eye('fp-' + nm + '-' + peran)}</div></div>`;
-  const tombolPass = `<button type="button" id="fpBtn-${peran}" class="btn btn-b ${peran === 'caleg' ? 'flex-1 whitespace-nowrap px-3' : 'w-full'}" aria-expanded="false" onclick="togglePass('${peran}')"><i class="fa-solid fa-key mr-2"></i>Ubah Password</button>`;
+  const tombolPass = `<button type="button" id="fpBtn-${peran}" class="btn btn-b whitespace-nowrap ${peran === 'caleg' ? 'flex-1 px-3' : 'w-full'} md:w-auto md:flex-none md:px-6" aria-expanded="false" onclick="togglePass('${peran}')"><i class="fa-solid fa-key mr-2"></i>Ubah Password</button>`;
   return `${peran === 'caleg'
-      ? `<div class="flex gap-2"><button type="button" class="btn btn-b flex-1 whitespace-nowrap px-3" onclick="ubahDataCaleg()"><i class="fa-solid fa-user-pen mr-2"></i>Ubah Data</button>${tombolPass}</div>`
+      ? `<div class="flex gap-2"><button type="button" class="btn btn-b flex-1 whitespace-nowrap px-3 md:flex-none md:px-6" onclick="ubahDataCaleg()"><i class="fa-solid fa-user-pen mr-2"></i>Ubah Data</button>${tombolPass}</div>`
       : tombolPass}
-    <form id="fp-${peran}" class="hidden mt-4 space-y-3" onsubmit="simpanPassword(event,'${peran}')" autocomplete="off">
+    <form id="fp-${peran}" class="hidden mt-4 space-y-3 md:max-w-3xl" onsubmit="simpanPassword(event,'${peran}')" autocomplete="off">
+      <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-3">
       ${kolom('lama', 'Password lama', 'current-password')}
       ${kolom('baru', 'Password baru <span class="font-normal text-slate-500">(min. 6 karakter)</span>', 'new-password', 'minlength="6"')}
       ${kolom('ulang', 'Konfirmasi password baru', 'new-password')}
+      </div>
       <p data-msg class="text-sm text-red-600"></p>
-      <button class="btn w-full"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan Password</button>
+      <button class="btn w-full md:w-auto md:px-6"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan Password</button>
     </form>`;
 }
 function togglePass(peran) {
@@ -1613,7 +1617,7 @@ async function loadUser(silent) {
 const SHEETS = {
   diri: {
     judul: 'Data Diri', ikon: 'fa-id-card',
-    body: () => '<dl id="diri" class="grid grid-cols-3 gap-y-3 text-sm"></dl>',
+    body: () => '<dl id="diri" class="grid grid-cols-3 gap-y-3 text-sm md:grid-cols-[7rem_auto] md:gap-x-4 md:gap-y-3.5 md:w-fit md:max-w-xl md:mx-auto text-left"></dl>',
     foot: footAkun('user'),
     init: () => isiDiri()
   },
@@ -1715,11 +1719,11 @@ document.addEventListener('keydown', e => {
 function isiDiri() {
   const el = $('diri'); if (!el) return;
   const p = PROFIL;
-  if (!p) { el.innerHTML = '<p class="col-span-3 text-slate-500">Memuat data...</p>'; return; }
+  if (!p) { el.innerHTML = '<p class="col-span-3 md:col-span-2 text-slate-500">Memuat data...</p>'; return; }
   const jk = p.jenis_kelamin === 'L' ? 'Laki-laki' : p.jenis_kelamin === 'P' ? 'Perempuan' : '-';
   el.innerHTML = [['Nama',p.nama],['NIK',p.nik],['Jenis kelamin',jk],['No. HP',p.no_hp],['Alamat',p.alamat],
     ['Kelurahan',p.kelurahan],['Kecamatan',p.kecamatan],['No. TPS',p.no_tps]]
-    .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold">${k === 'NIK' ? nikMask(v) : esc(v || '-')}</dd>`).join('');
+    .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 md:col-span-1 font-semibold break-words">${k === 'NIK' ? nikMask(v) : esc(v || '-')}</dd>`).join('');
 }
 // Mengisi nilai batang; dipanggil ulang saat data diperbarui sehingga batang bergeser mulus tanpa diulang dari nol
 function isiJumlah() {
