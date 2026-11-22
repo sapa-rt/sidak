@@ -21,10 +21,20 @@
   .hdr-img{right:1rem}
   @media (min-width:768px){.hdr-img{right:1.5rem}}
   @media (min-width:1024px){.hdr-img{right:2rem}}
-  .hdr.has-caleg .hdr-img{right:7rem}
-  @media (min-width:768px){.hdr.has-caleg .hdr-img{right:8.5rem}}
-  @media (min-width:1024px){.hdr.has-caleg .hdr-img{right:9.5rem}}
-  .ic-diri{width:2.25rem;height:2.25rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1}
+  /* Header halaman Caleg & User: foto caleg menyatu dengan degradasi latar, nama rata kanan satu baris */
+  .hdr.has-caleg{min-height:6.75rem}
+  @media (min-width:768px){.hdr.has-caleg{min-height:7.5rem}}
+  .js-caleg{position:absolute;inset:0;pointer-events:none}
+  .cal-foto{position:absolute;top:0;right:0;height:100%;width:9rem;object-fit:cover;object-position:center 15%;
+    -webkit-mask-image:linear-gradient(to left,#000 40%,transparent),linear-gradient(to top,transparent 0,#000 55%);
+    mask-image:linear-gradient(to left,#000 40%,transparent),linear-gradient(to top,transparent 0,#000 55%);
+    -webkit-mask-composite:source-in;mask-composite:intersect}
+  .cal-ikon{position:absolute;top:0;right:0;height:100%;width:9rem;display:flex;align-items:center;justify-content:flex-end;padding-right:2rem;font-size:2.5rem;color:#ffffff66}
+  .cal-nama{position:absolute;right:1rem;bottom:.5rem;max-width:calc(100% - 2rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right;
+    font-weight:800;font-size:.9rem;line-height:1.2;color:#fff;text-shadow:0 1px 4px rgba(10,36,99,.7)}
+  @media (min-width:768px){.cal-foto,.cal-ikon{width:11rem}.cal-nama{right:1.5rem;font-size:1.05rem}}
+  @media (min-width:1024px){.cal-foto,.cal-ikon{width:13rem}.cal-nama{right:2rem;font-size:1.15rem}}
+  .ic-diri{height:2.25rem;padding:0 .9rem 0 .75rem;gap:.45rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;font-weight:700;white-space:nowrap}
   .ic-diri:hover{background:#bae6fd}
   .ic-diri.aktif{background:#0284c7;color:#fff}
   .ic-diri:focus-visible{outline:2px solid #1d4ed8;outline-offset:2px}
@@ -182,18 +192,19 @@
 <section id="v-admin" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
   <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-7">
+    <div class="flex items-center gap-2 text-slate-600 font-semibold -mb-3"><i class="fa-regular fa-calendar text-blue-700"></i><span class="js-date"></span></div>
     <div>
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
         <div class="flex items-center gap-2">
-          <button type="button" class="ic-diri" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')" title="Data Calon Legislatif" aria-label="Data Calon Legislatif"><i class="fa-solid fa-id-card"></i></button>
+          <button type="button" class="ic-diri" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')" title="Data Calon Legislatif" aria-label="Data Calon Legislatif"><i class="fa-solid fa-id-card"></i><span>Data Caleg</span></button>
           <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
       </div>
       <div class="grid grid-cols-4 gap-1.5">
         <button type="button" class="fitur" data-fitur="kelola" aria-pressed="false" onclick="pilihFiturAdmin('kelola')"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-users-gear"></i></span><span class="fitur-lb">Kelola Pendata</span></button>
-        <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Konstituen</span></button>
-        <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Statistik</span></button>
+        <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Data Konstituen</span></button>
+        <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Statistik Data</span></button>
         <button type="button" class="fitur" data-fitur="cetak" aria-pressed="false" onclick="pilihFiturAdmin('cetak')"><span class="fitur-ic bg-gradient-to-br from-green-700 to-green-500"><i class="fa-solid fa-download"></i></span><span class="fitur-lb">Unduh Laporan</span></button>
       </div>
     </div>
@@ -273,6 +284,7 @@
 <section id="v-utama" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
   <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-5">
+    <div class="flex items-center gap-2 text-slate-600 font-semibold -mb-2"><i class="fa-regular fa-calendar text-blue-700"></i><span class="js-date"></span></div>
     <div class="flex items-center justify-between">
       <h2 class="font-bold"><i class="fa-solid fa-user-shield text-blue-700 mr-2"></i>Admin Utama</h2>
       <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
@@ -298,6 +310,7 @@
 <section id="v-user" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
   <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-7">
+    <div class="flex items-center gap-2 text-slate-600 font-semibold -mb-3"><i class="fa-regular fa-calendar text-blue-700"></i><span class="js-date"></span></div>
     <div>
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
@@ -371,31 +384,27 @@ let ADATA = [], UDATA = [], PROFIL = null;
 document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
 
 /* ---------- Header + jam ---------- */
-function headerHTML(tgl = true, mw = 'max-w-none') {
+function headerHTML(utama = false, mw = 'max-w-none') {
+  // Gambar Cloudinary hanya dipakai di header Admin Utama; halaman Caleg & User memakai foto caleg (lihat setCalegHeader)
   return `<header class="hdr relative overflow-hidden text-white">
-    <img src="${HEADER_IMG_URL}" alt="" class="hdr-img absolute top-0 h-full w-auto max-w-[45%] object-contain object-right opacity-90 pointer-events-none"
-         style="-webkit-mask-image:linear-gradient(to left,#000 40%,transparent);mask-image:linear-gradient(to left,#000 40%,transparent)">
+    ${utama ? `<img src="${HEADER_IMG_URL}" alt="" class="hdr-img absolute top-0 h-full w-auto max-w-[45%] object-contain object-right opacity-90 pointer-events-none"
+         style="-webkit-mask-image:linear-gradient(to left,#000 40%,transparent);mask-image:linear-gradient(to left,#000 40%,transparent)">` : ''}
     <div class="relative ${mw} mx-auto px-4 md:px-6 lg:px-8 pt-1 pb-4 flex items-start justify-between gap-3">
-      <div class="flex flex-col items-start text-left gap-1 min-w-0">
-        <span class="inline-flex items-center justify-center w-16 h-16 -mt-1"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
-        <p class="font-bold text-sm sm:text-base leading-tight">Sistem Informasi Data Konstituen</p>
-        ${tgl ? '<p class="js-date text-xs sm:text-sm text-blue-100"></p>' : ''}
-      </div>
-      <div class="js-caleg shrink-0"></div>
-    </div></header>`;
+      <span class="inline-flex items-center justify-center w-16 h-16 -mt-1"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
+    </div>
+    <div class="js-caleg"></div></header>`;
 }
-// Foto + nama caleg di header (halaman Caleg dan User)
+// Foto + nama caleg di header (halaman Caleg dan User): foto menyatu dengan degradasi latar, nama rata kanan satu baris
 function setCalegHeader(p) {
   const ada = !!(p && (p.nama || p.foto));
   document.querySelectorAll('.js-caleg').forEach(el => {
-    el.innerHTML = !ada ? '' : `<div class="flex flex-col items-center gap-1 w-[5.5rem] sm:w-24 md:w-28 pt-2">
-      ${p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-white shadow-lg">`
-        : '<span class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/20 border-2 border-white flex items-center justify-center text-xl"><i class="fa-solid fa-user"></i></span>'}
-      <p class="text-xs font-bold text-center leading-tight line-clamp-2">${esc(p.nama || '')}</p></div>`;
+    el.innerHTML = !ada ? '' : `${p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="cal-foto">`
+        : '<span class="cal-ikon"><i class="fa-solid fa-user"></i></span>'}
+      <p class="cal-nama">${esc(p.nama || '')}</p>`;
   });
   document.querySelectorAll('.hdr').forEach(h => h.classList.toggle('has-caleg', ada));
 }
-document.querySelectorAll('.js-header').forEach(h => h.innerHTML = headerHTML());   // tanggal di header hanya untuk User; di Admin tanggal + Keluar ada di badan halaman
+document.querySelectorAll('.js-header').forEach(h => h.innerHTML = headerHTML(!!h.closest('#v-utama')));   // tanggal kini ada di badan halaman (di bawah header) untuk semua halaman
 /* NIK: tampil bintang (asterisk) secara default, ikon mata untuk melihat/menyembunyikan */
 const NIK_MASK = '****************';
 function nikMask(nik) {
@@ -1067,7 +1076,7 @@ function isiDiriCaleg() {
       .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
     : '<p class="col-span-3 text-slate-500">Memuat data...</p>';
   host.innerHTML = `<div class="bg-white rounded-2xl shadow overflow-hidden">
-    <div class="bg-gradient-to-br from-sky-600 to-sky-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-id-card mr-2"></i>Data Diri</h2></div>
+    <div class="bg-gradient-to-br from-sky-600 to-sky-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-id-card mr-2"></i>Data Calon Legislatif</h2></div>
     <div class="px-4 py-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
       <div class="shrink-0">${foto}</div>
       <dl class="grid grid-cols-3 gap-y-3 text-sm w-full">${isi}</dl></div></div>`;
