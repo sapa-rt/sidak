@@ -1459,12 +1459,15 @@ const SHEETS = {
   },
   jumlah: {
     judul: 'Statistik Data', ikon: 'fa-chart-simple',
-    body: () => `<h4 class="font-bold text-sm mb-3">Jumlah Data</h4>
-      ${donutHTML('uj', GENDER_SEG)}
-      <div class="mt-6 pt-6 border-t border-slate-200">
-        <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
-        ${donutHTML('u')}
+    body: () => `<div class="md:grid md:grid-cols-2 md:gap-8">
+      <div>
+        <h4 class="font-bold text-sm mb-3">Jumlah Data</h4>
+        ${donutHTML('uj', GENDER_SEG, true)}
       </div>
+      <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
+        <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
+        ${donutHTML('u', DONUT_SEG, true)}
+      </div></div>
       <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>`,
     init: () => setTimeout(isiJumlah, 280)   // grafik tumbuh saat modal hampir selesai naik
   },
@@ -1473,12 +1476,12 @@ const SHEETS = {
     body: () => `
       <div class="md:grid md:grid-cols-3 md:gap-8">
       <div>
-        <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
-        ${donutHTML('s', DONUT_SEG, true)}
-      </div>
-      <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
         <h4 class="font-bold text-sm mb-3">Jumlah Data</h4>
         ${donutHTML('sj', GENDER_SEG, true)}
+      </div>
+      <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
+        <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
+        ${donutHTML('s', DONUT_SEG, true)}
       </div>
       <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
       <h4 class="font-bold text-sm mb-3">Data Potensial</h4>
