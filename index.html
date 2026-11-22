@@ -353,7 +353,7 @@ async function rpc(fn, args) { const { data, error } = await sb.rpc(fn, args); i
 let S = JSON.parse(sessionStorage.getItem('sidak') || 'null');
 if (S && S.role === 'admin') { S = null; sessionStorage.removeItem('sidak'); }   // peran lama (admin) kini Caleg; sesi lama tidak dipakai
 // Kredensial untuk RPC Caleg (halaman Caleg memakai fungsi admin_* yang dibatasi per caleg)
-function ap() { return { p_id: S.id, p_pass: S.pass }; }
+function ap() { return { p_caleg: S.id, p_pass: S.pass }; }
 let ADATA = [], UDATA = [], PROFIL = null;
 
 document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
@@ -1114,7 +1114,7 @@ async function resetCaleg(id) {
 async function hapusCaleg(id) {
   const c = UCAL.find(x => x.id === id) || {};
   const ok = await konfirmasi({ judul: 'Hapus caleg?', tipe: 'bahaya', tombol: 'Ya, hapus',
-    pesan: (c.nama || 'Caleg ini') + ' akan dihapus permanen dan tidak bisa dikembalikan.' });
+    pesan: (c.nama || 'Caleg ini') + ' beserta seluruh pendata dan data konstituennya akan dihapus permanen dan tidak bisa dikembalikan.' });
   if (!ok) return;
   try { await rpc('utama_caleg_hapus', { p_pass: S.pass, p_id: id }); await loadUtama(); toast('Caleg berhasil dihapus'); }
   catch (e) { notif(e.message, 'Gagal menghapus caleg'); }
