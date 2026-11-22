@@ -36,6 +36,16 @@
     font-weight:800;font-size:1rem;line-height:1.2;color:#fff;text-shadow:0 1px 4px rgba(10,36,99,.7)}
   @media (min-width:768px){.cal-foto,.cal-ikon{width:13rem}.cal-nama{right:1.5rem;bottom:.9rem;font-size:1.15rem}}
   @media (min-width:1024px){.cal-foto,.cal-ikon{width:15rem}.cal-nama{right:2rem;bottom:1rem;font-size:1.3rem}}
+  /* Chart Jumlah Data di header (Caleg & User) */
+  .hdr-ring-box{width:4.75rem;height:4.75rem;flex:none}
+  .hdr-ring-n{font-size:1.15rem;line-height:1;text-shadow:0 1px 3px rgba(10,36,99,.6)}
+  .hdr-ring-l{font-size:.55rem;line-height:1.2;opacity:.85}
+  @media (min-width:768px){.hdr-ring-box{width:5.75rem;height:5.75rem}.hdr-ring-n{font-size:1.35rem}.hdr-ring-l{font-size:.6rem}}
+  @media (min-width:1024px){.hdr-ring-box{width:6.5rem;height:6.5rem}.hdr-ring-n{font-size:1.5rem}}
+  /* Kartu Statistik Data: blok Jumlah Data hanya tampil di tablet/PC (di HP sudah ada di header) */
+  .jd-wrap{display:none}
+  @media (min-width:768px){.jd-wrap{display:block}}
+  @media (max-width:767px){.jd-wrap + div{margin-top:0!important;padding-top:0!important;border-top:0!important}}
   .ic-diri{height:2.25rem;padding:0 .9rem 0 .75rem;gap:.45rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;color:#0369a1;font-weight:700;white-space:nowrap}
   .ic-diri:hover{background:#bae6fd}
   .ic-diri.aktif{background:#0284c7;color:#fff}
@@ -386,13 +396,48 @@ let ADATA = [], UDATA = [], PROFIL = null;
 document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
 
 /* ---------- Header + jam ---------- */
+// Chart lingkaran Jumlah Data (Laki-laki / Perempuan) untuk header Caleg & User; diisi oleh isiRingHeader()
+const HDR_SEG = [['Laki', 'Laki-laki', '#38bdf8'], ['Perempuan', 'Perempuan', '#f472b6']];
+function hdrRingHTML() {
+  return `<div class="hdr-ring flex items-center gap-3" role="img" aria-label="Jumlah data: 0">
+    <div class="hdr-ring-box relative">
+      <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90" aria-hidden="true">
+        <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="16"/>
+        ${HDR_SEG.map(([k, , c]) => `<circle data-seg="${k}" cx="60" cy="60" r="48" fill="none" stroke="${c}" stroke-width="16" style="stroke-dasharray:0 301.6;transition:stroke-dasharray .9s ease,stroke-dashoffset .9s ease"/>`).join('')}
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center"><span data-total class="hdr-ring-n font-extrabold">0</span><span class="hdr-ring-l">Jumlah data</span></div>
+    </div>
+    <div class="hidden md:block text-xs space-y-1">${HDR_SEG.map(([k, lb, c]) =>
+      `<p class="flex items-center gap-1.5 whitespace-nowrap"><span class="inline-block w-2.5 h-2.5 rounded-full" style="background:${c}"></span>${lb} <b data-n="${k}">0</b></p>`).join('')}</div>
+  </div>`;
+}
+function isiRingHeader() {
+  let c = null, host = '';
+  if (S && S.role === 'caleg') { c = hitungJK(ADATA); host = '#v-admin'; }
+  else if (S && S.role === 'user') { const m = SUM || {}; c = { Laki: Number(m.laki) || 0, Perempuan: Number(m.perempuan) || 0 }; host = '#v-user'; }
+  if (!c) return;
+  const t = c.Laki + c.Perempuan, C = 2 * Math.PI * 48;
+  document.querySelectorAll(host + ' .hdr-ring').forEach(el => {
+    let off = 0;
+    HDR_SEG.forEach(([k]) => {
+      const len = t ? c[k] / t * C : 0, o = el.querySelector(`circle[data-seg="${k}"]`);
+      o.style.strokeDasharray = len + ' ' + (C - len); o.style.strokeDashoffset = -off; off += len;
+      el.querySelector(`[data-n="${k}"]`).textContent = c[k];
+    });
+    const n = el.querySelector('[data-total]'); n.textContent = t; n.style.fontSize = String(t).length >= 5 ? '.85rem' : '';
+    el.setAttribute('aria-label', 'Jumlah data: ' + t + ' (Laki-laki ' + c.Laki + ', Perempuan ' + c.Perempuan + ')');
+  });
+}
 function headerHTML(utama = false, mw = 'max-w-none') {
   // Gambar Cloudinary hanya dipakai di header Admin Utama; halaman Caleg & User memakai foto caleg (lihat setCalegHeader)
   return `<header class="hdr relative overflow-hidden text-white">
     ${utama ? `<img src="${HEADER_IMG_URL}" alt="" class="hdr-img absolute top-0 h-full w-auto max-w-[45%] object-contain object-right opacity-90 pointer-events-none"
          style="-webkit-mask-image:linear-gradient(to left,#000 40%,transparent);mask-image:linear-gradient(to left,#000 40%,transparent)">` : ''}
     <div class="relative ${mw} mx-auto px-4 md:px-6 lg:px-8 pt-3 pb-5 md:pt-4 md:pb-6 flex items-start justify-between gap-3">
-      <span class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
+      <div class="flex items-center gap-3 md:gap-5">
+        <span class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24"><img src="${LOGO_URL}" alt="SIDAK" class="max-w-full max-h-full object-contain"></span>
+        ${utama ? '' : hdrRingHTML()}
+      </div>
     </div>
     <div class="js-caleg"></div></header>`;
 }
@@ -856,6 +901,7 @@ async function loadAdmin(silent) {
   try {
     ADATA = await rpc('admin_data', { ...ap() });
     hitungPrioritas();
+    isiRingHeader();
     if ($('lihatBody')) renderLihat();
     renderLihatPend();
     renderKons(); renderSheet(); renderDetailPendata();
@@ -1073,7 +1119,10 @@ function footAkun(peran) {
   const eye = id => `<button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('${id}',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button>`;
   const kolom = (nm, lb, ac, extra = '') => `<div><label class="text-sm font-semibold">${lb}</label>
         <div class="relative"><input name="${nm}" id="fp-${nm}-${peran}" type="password" class="inp pr-11" autocomplete="${ac}" ${extra} required>${eye('fp-' + nm + '-' + peran)}</div></div>`;
-  return `<button type="button" id="fpBtn-${peran}" class="btn btn-b w-full" aria-expanded="false" onclick="togglePass('${peran}')"><i class="fa-solid fa-key mr-2"></i>Ubah Password</button>
+  const tombolPass = `<button type="button" id="fpBtn-${peran}" class="btn btn-b ${peran === 'caleg' ? 'flex-1 whitespace-nowrap px-3' : 'w-full'}" aria-expanded="false" onclick="togglePass('${peran}')"><i class="fa-solid fa-key mr-2"></i>Ubah Password</button>`;
+  return `${peran === 'caleg'
+      ? `<div class="flex gap-2"><button type="button" class="btn btn-b flex-1 whitespace-nowrap px-3" onclick="ubahDataCaleg()"><i class="fa-solid fa-user-pen mr-2"></i>Ubah Data</button>${tombolPass}</div>`
+      : tombolPass}
     <form id="fp-${peran}" class="hidden mt-4 space-y-3" onsubmit="simpanPassword(event,'${peran}')" autocomplete="off">
       ${kolom('lama', 'Password lama', 'current-password')}
       ${kolom('baru', 'Password baru <span class="font-normal text-slate-500">(min. 6 karakter)</span>', 'new-password', 'minlength="6"')}
@@ -1122,15 +1171,78 @@ function isiDiriCaleg() {
   // Kerangka (termasuk panel password yang bisa sedang terbuka) dibuat sekali; pembaruan data hanya mengganti foto dan isi
   if (!$('cdIsi')) host.innerHTML = `<div class="bg-white rounded-2xl shadow overflow-hidden">
     <div class="bg-gradient-to-br from-sky-600 to-sky-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-id-card mr-2"></i>Data Calon Legislatif</h2></div>
-    <div class="px-4 py-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
+    <div class="px-4 py-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-10 lg:gap-12">
       <div id="cdFoto" class="shrink-0"></div>
-      <dl id="cdIsi" class="grid grid-cols-3 gap-y-3 text-sm w-full"></dl></div>
+      <dl id="cdIsi" class="grid grid-cols-3 gap-y-3 text-sm w-full md:grid-cols-[7rem_minmax(0,1fr)] md:gap-x-4 md:gap-y-3.5"></dl></div>
     <div class="px-4 py-4 border-t border-slate-100">${footAkun('caleg')}</div></div>`;
-  $('cdFoto').innerHTML = p && p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-slate-200">`
-    : '<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-4xl"><i class="fa-solid fa-user"></i></div>';
+  $('cdFoto').innerHTML = p && p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-28 h-28 md:w-40 md:h-40 rounded-2xl object-cover border border-slate-200">`
+    : '<div class="w-28 h-28 md:w-40 md:h-40 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-4xl"><i class="fa-solid fa-user"></i></div>';
   $('cdIsi').innerHTML = p ? [['Nama', p.nama], ['No. HP', p.no_hp], ['Email', p.email], ['Dapil', p.dapil], ['Partai', p.partai]]
-      .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
-    : '<p class="col-span-3 text-slate-500">Memuat data...</p>';
+      .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 md:col-span-1 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
+    : '<p class="col-span-3 md:col-span-2 text-slate-500">Memuat data...</p>';
+}
+// Ubah Data Caleg: semua elemen Data Diri (foto, nama, HP, email, dapil, partai). Foto baru menimpa foto lama.
+async function hapusFotoLama(url) {
+  // Foto disimpan sebagai data di kolom foto, jadi foto baru otomatis menimpa yang lama.
+  // Bila foto lama ternyata berupa berkas di Supabase Storage, berkas itu ikut dihapus (jika bisa).
+  const pre = SUPABASE_URL + '/storage/v1/object/public/';
+  if (!url || !String(url).startsWith(pre)) return;
+  const [bucket, ...path] = String(url).slice(pre.length).split('?')[0].split('/');
+  try { await sb.storage.from(bucket).remove([decodeURIComponent(path.join('/'))]); } catch (_) {}
+}
+function ubahDataCaleg() {
+  const p = CPROF; if (!p) return notif('Data belum termuat. Coba lagi sebentar.', 'Belum siap');
+  const m = $('modal'); let foto = '';
+  const ikon = '<i class="fa-solid fa-user text-2xl"></i>';
+  m.innerHTML = `<form class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-5 space-y-3">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-lg">Ubah Data Caleg</h3><button type="button" data-x class="text-slate-500 text-xl">&times;</button></div>
+    <div><label class="text-sm font-semibold">Foto</label>
+      <div class="flex items-center gap-3 mt-1"><div id="cFotoPrev" class="w-20 h-20 shrink-0 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 overflow-hidden">${p.foto ? `<img src="${esc(p.foto)}" alt="" class="w-full h-full object-cover">` : ikon}</div>
+      <input id="cFoto" type="file" accept="image/*" class="text-sm flex-1 min-w-0"></div>
+      <p class="text-xs text-slate-500 mt-1">Pilih foto baru untuk menggantikan foto lama. Kosongkan jika foto tidak diubah.</p></div>
+    <div><label class="text-sm font-semibold">Nama</label><input name="nama" class="inp" required></div>
+    <div><label class="text-sm font-semibold">No. HP</label><input name="no_hp" type="text" inputmode="numeric" oninput="angka(this)" maxlength="15" pattern="\\d{9,15}" title="No. HP hanya angka, 9 sampai 15 digit" class="inp" required></div>
+    <div><label class="text-sm font-semibold">Email (username)</label><input name="email" type="email" class="inp" required></div>
+    <div><label class="text-sm font-semibold">Daerah Pemilihan</label>
+      <select name="dapil_pilih" class="inp" required><option value="">Pilih...</option><option>Kadia/Wua-Wua</option><option value="__lain">Lainnya...</option></select>
+      <input name="dapil_lain" class="inp mt-2 hidden" placeholder="Tulis daerah pemilihan"></div>
+    <div><label class="text-sm font-semibold">Partai</label><input name="partai" class="inp" required></div>
+    <p data-msg class="text-sm text-red-600"></p>
+    <button class="btn w-full"><i class="fa-solid fa-floppy-disk mr-2"></i>Simpan Perubahan</button></form>`;
+  m.classList.remove('hidden'); m.classList.add('flex');
+  const f = m.querySelector('form'), msgEl = f.querySelector('[data-msg]');
+  f.elements['nama'].value = p.nama || ''; f.elements['no_hp'].value = p.no_hp || ''; f.elements['email'].value = p.email || ''; f.elements['partai'].value = p.partai || '';
+  const sel = f.elements['dapil_pilih'], lainEl = f.elements['dapil_lain'];
+  const tampilLain = on => { lainEl.classList.toggle('hidden', !on); lainEl.required = on; };
+  if (p.dapil === 'Kadia/Wua-Wua') sel.value = p.dapil;
+  else if (p.dapil) { sel.value = '__lain'; lainEl.value = p.dapil; tampilLain(true); }
+  sel.onchange = () => { const lain = sel.value === '__lain'; tampilLain(lain); if (lain) lainEl.focus(); else lainEl.value = ''; };
+  f.querySelector('[data-x]').onclick = closeForm;
+  $('cFoto').onchange = async e => {
+    const file = e.target.files[0]; msgEl.textContent = ''; foto = '';
+    if (!file) { $('cFotoPrev').innerHTML = p.foto ? `<img src="${esc(p.foto)}" alt="" class="w-full h-full object-cover">` : ikon; return; }
+    try { foto = await bacaFoto(file); $('cFotoPrev').innerHTML = `<img src="${foto}" alt="" class="w-full h-full object-cover">`; }
+    catch (er) { msgEl.textContent = er.message; e.target.value = ''; $('cFotoPrev').innerHTML = p.foto ? `<img src="${esc(p.foto)}" alt="" class="w-full h-full object-cover">` : ikon; }
+  };
+  f.onsubmit = async e => {
+    e.preventDefault(); msgEl.textContent = '';
+    const o = Object.fromEntries(new FormData(f).entries());
+    ['nama', 'no_hp', 'email', 'dapil_lain', 'partai'].forEach(k => { if (typeof o[k] === 'string') o[k] = o[k].trim(); });
+    const dapil = o.dapil_pilih === '__lain' ? o.dapil_lain : o.dapil_pilih;
+    if (!dapil) return msgEl.textContent = 'Daerah pemilihan wajib diisi.';
+    const b = f.querySelector('button:not([type])'); b.disabled = true;
+    try {
+      await rpc('caleg_ubah_data', { p_id: S.id, p_pass: S.pass, p_nama: o.nama, p_hp: normHp(o.no_hp), p_email: o.email, p_dapil: dapil, p_partai: o.partai, p_foto: foto || null });
+      if (foto) hapusFotoLama(p.foto);
+      await loadCaleg(); closeForm(); toast('Data berhasil diperbarui');
+    } catch (er) {
+      const t = String(er.message || '') + String(er.code || '');
+      msgEl.textContent = /Could not find the function|PGRST202/i.test(t) ? 'Fitur ubah data belum aktif di database. Jalankan SQL caleg_ubah_data terlebih dahulu.'
+        : /Akses ditolak/i.test(t) ? 'Sesi tidak valid. Silakan masuk kembali.'
+        : /sudah terdaftar/i.test(t) ? er.message : 'Gagal menyimpan: ' + (er.message || '');
+      b.disabled = false;
+    }
+  };
 }
 /* ---------- ADMIN UTAMA: Registrasi Caleg ---------- */
 let UCAL = [];
@@ -1486,6 +1598,7 @@ async function loadUser(silent) {
     if (!PROFIL.nik && $('modal').classList.contains('hidden')) ubahDiri(false);
     if (!UHDR) rpc('user_caleg', ua()).then(c => { UHDR = c; setCalegHeader(c); }).catch(() => {});   // foto & nama caleg di header
     SUM = await rpc('user_ringkasan', ua());
+    isiRingHeader();
     UDATA = await rpc('user_data', ua());
     renderSheet();   // perbarui isi modal yang sedang terbuka (bila ada)
     renderUser();    // tabel Data Konstituen di halaman
@@ -1507,7 +1620,7 @@ const SHEETS = {
   jumlah: {
     judul: 'Statistik Data', ikon: 'fa-chart-simple',
     body: () => `<div class="md:grid md:grid-cols-2 md:gap-8">
-      <div>
+      <div class="jd-wrap">
         <h4 class="font-bold text-sm mb-3">Jumlah Data</h4>
         ${donutHTML('uj', GENDER_SEG, true)}
       </div>
@@ -1522,7 +1635,7 @@ const SHEETS = {
     judul: 'Statistik Data', ikon: 'fa-chart-pie',
     body: () => `
       <div class="md:grid md:grid-cols-3 md:gap-8">
-      <div>
+      <div class="jd-wrap">
         <h4 class="font-bold text-sm mb-3">Jumlah Data</h4>
         ${donutHTML('sj', GENDER_SEG, true)}
       </div>
@@ -1840,7 +1953,15 @@ function dialogPdf({ blob, nama, judul, jumlah, halaman, filter }) {
 
 /* ---------- Cetak ---------- */
 // Satu pintu untuk semua cetak (user dan admin): buat PDF, lalu tampilkan dialog Unduh / Batal
-function printRows(title, rows, withPendata, filter = '') {
+async function fotoUntukPdf(src) {
+  if (!src) return null;
+  if (String(src).startsWith('data:')) return src;
+  try {
+    const bl = await (await fetch(src)).blob();
+    return await new Promise((ok, no) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = no; fr.readAsDataURL(bl); });
+  } catch (_) { return null; }
+}
+async function printRows(title, rows, withPendata, filter = '') {
   const J = window.jspdf && window.jspdf.jsPDF;
   const gagal = () => notif('Pustaka PDF belum termuat. Periksa koneksi internet, lalu muat ulang halaman.', 'PDF belum siap');
   if (!J) return gagal();
@@ -1851,13 +1972,25 @@ function printRows(title, rows, withPendata, filter = '') {
     ? rows.map((d, i) => [i + 1, d.nama || '', d.jenis_kelamin || '', d.no_hp || '', d.kecamatan || '', d.kelurahan || '', d.no_tps || '',
         d.hubungan || (d.is_diri ? 'Data diri' : '-')].concat(withPendata ? [d.pendata_nama || ''] : []).concat([d.ganda ? 'Ganda' : '']))
     : [[{ content: 'Tidak ada data', colSpan: head.length, styles: { halign: 'center' } }]];
-  const judul = doc.splitTextToSize(title, 270);
+  // Foto + nama caleg di sisi kanan dokumen (halaman pertama)
+  const cp = S && S.role === 'caleg' ? CPROF : S && S.role === 'user' ? UHDR : null;
+  let yKanan = 0;
+  if (cp && (cp.nama || cp.foto)) {
+    const img = await fotoUntukPdf(cp.foto); let yy = 8;
+    if (img) { try { doc.addImage(img, /^data:image\/png/.test(img) ? 'PNG' : 'JPEG', 287 - 18, yy, 18, 18); yy += 20; } catch (_) {} }
+    if (cp.nama) {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(20);
+      const nm = doc.splitTextToSize(String(cp.nama), 55); doc.text(nm, 287, yy + 3, { align: 'right' }); yy += 3 + nm.length * 4;
+    }
+    yKanan = yy + 2;
+  }
+  const judul = doc.splitTextToSize(title, yKanan ? 235 : 270);
   doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(20); doc.text(judul, 15, 15);
   const y = 15 + (judul.length - 1) * 6;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(90);
   doc.text('SIDAK - Dicetak ' + new Date().toLocaleString('id-ID') + ' - Total ' + rows.length + ' data', 15, y + 5.5);
   doc.autoTable({
-    startY: y + 9, margin: { left: 15, right: 10, bottom: 14 }, theme: 'grid', head: [head], body,
+    startY: Math.max(y + 9, yKanan), margin: { left: 15, right: 10, bottom: 14 }, theme: 'grid', head: [head], body,
     styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 1.8, lineColor: [68, 68, 68], lineWidth: 0.1, textColor: 20 },
     headStyles: { fillColor: [229, 231, 235], textColor: 20, fontStyle: 'bold' },
     columnStyles: { 0: { cellWidth: 10 } }
