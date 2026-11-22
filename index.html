@@ -148,17 +148,17 @@
 <section id="v-login" class="hidden min-h-screen flex flex-col p-4 md:p-8 abstrak">
   <div class="flex-1 flex items-center justify-center w-full">
   <div class="w-full max-w-sm bg-white/70 backdrop-blur rounded-2xl shadow-xl px-6 pb-6 pt-3">
-    <img class="js-logo mx-auto -mt-2 -mb-3 w-[11.25rem] h-[11.25rem] max-w-full object-contain" alt="SIDAK">
+    <img id="logoLogin" class="js-logo mx-auto -mt-2 -mb-3 w-[11.25rem] h-[11.25rem] max-w-full object-contain" alt="SIDAK" onclick="bukaAdminUtama()">
     <div class="flex items-center gap-3 mb-3"><span class="flex-1 h-px bg-slate-300"></span><span class="text-sm font-semibold text-slate-500">Login sebagai</span><span class="flex-1 h-px bg-slate-300"></span></div>
-    <div class="grid grid-cols-2 gap-2 mb-3" role="radiogroup" aria-label="Login sebagai"><label class="cursor-pointer"><input type="radio" name="role" value="admin" class="peer sr-only" onchange="setRole()"><span class="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white py-2.5 font-semibold text-slate-600 hover:bg-slate-50 peer-checked:border-green-700 peer-checked:bg-green-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-green-600"><i class="fa-solid fa-user-shield"></i>Admin</span></label><label class="cursor-pointer"><input type="radio" name="role" value="user" class="peer sr-only" onchange="setRole()"><span class="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white py-2.5 font-semibold text-slate-600 hover:bg-slate-50 peer-checked:border-green-700 peer-checked:bg-green-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-green-600"><i class="fa-solid fa-user"></i>User</span></label></div>
+    <div class="grid grid-cols-2 gap-2 mb-3" role="radiogroup" aria-label="Login sebagai"><label class="cursor-pointer"><input type="radio" name="role" value="caleg" class="peer sr-only" onchange="setRole()"><span class="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white py-2.5 font-semibold text-slate-600 hover:bg-slate-50 peer-checked:border-green-700 peer-checked:bg-green-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-green-600"><i class="fa-solid fa-user-tie"></i>Caleg</span></label><label class="cursor-pointer"><input type="radio" name="role" value="user" class="peer sr-only" onchange="setRole()"><span class="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white py-2.5 font-semibold text-slate-600 hover:bg-slate-50 peer-checked:border-green-700 peer-checked:bg-green-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-green-600"><i class="fa-solid fa-user"></i>User</span></label></div>
     <div id="blk-admin" class="hidden mb-3"><label class="text-sm font-semibold">Password</label>
       <div class="relative mb-0"><input id="pAdmin" type="password" class="inp pr-11" autocomplete="current-password"><button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('pAdmin',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button></div></div>
-    <div id="blk-hp" class="hidden mb-3"><label class="text-sm font-semibold">Nomor Telepon</label>
+    <div id="blk-hp" class="hidden mb-3"><label id="lblHp" class="text-sm font-semibold">Nomor Telepon</label>
       <input id="hp" type="tel" inputmode="tel" class="inp" placeholder="08xxxxxxxxxx" oninput="jadwalCekHp()" onblur="cekHp()"></div>
     <div id="blk-pass" class="hidden mb-3"><label class="text-sm font-semibold">Password</label>
       <div class="relative mb-0"><input id="pUser" type="password" class="inp pr-11" autocomplete="current-password"><button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('pUser',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button></div></div>
     <div id="blk-reg" class="hidden mb-3">
-      <p class="text-sm text-slate-600 mb-2">Nomor Anda terdaftar. Buat password untuk akun ini (min. 6 karakter).</p>
+      <p class="text-sm text-slate-600 mb-2">Anda terdaftar. Buat password untuk akun ini (min. 6 karakter).</p>
       <div class="relative mb-2"><input id="pReg1" type="password" class="inp pr-11" autocomplete="new-password" placeholder="Password baru"><button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('pReg1',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button></div>
       <div class="relative mb-0"><input id="pReg2" type="password" class="inp pr-11" autocomplete="new-password" placeholder="Ulangi password"><button type="button" class="absolute right-1 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-slate-800" onclick="toggleEye('pReg2',this)" aria-label="Lihat password"><i class="fa-regular fa-eye"></i></button></div></div>
     <p id="loginMsg" class="text-sm text-red-600 min-h-[1.25rem] mb-2"></p>
@@ -177,13 +177,17 @@
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
         <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
       </div>
-      <div class="grid grid-cols-4 gap-1.5">
+      <div class="grid grid-cols-5 gap-1.5">
+        <button type="button" class="fitur" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')"><span class="fitur-ic bg-gradient-to-br from-sky-600 to-sky-400"><i class="fa-solid fa-id-card"></i></span><span class="fitur-lb">Data Diri</span></button>
         <button type="button" class="fitur" data-fitur="kelola" aria-pressed="false" onclick="pilihFiturAdmin('kelola')"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-users-gear"></i></span><span class="fitur-lb">Kelola Pendata</span></button>
         <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Data Konstituen</span></button>
         <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Data Statistik</span></button>
         <button type="button" class="fitur" data-fitur="cetak" aria-pressed="false" onclick="pilihFiturAdmin('cetak')"><span class="fitur-ic bg-gradient-to-br from-green-700 to-green-500"><i class="fa-solid fa-download"></i></span><span class="fitur-lb">Unduh Data</span></button>
       </div>
     </div>
+
+    <!-- Data Diri Caleg -->
+    <section id="a-diri" class="hidden"></section>
 
     <!-- Kelola Pendata (menyatu dengan halaman, tanpa latar) -->
     <section id="a-kelola" class="hidden"><div class="bg-white rounded-2xl shadow overflow-hidden">
@@ -253,6 +257,31 @@
   <footer class="text-center text-xs text-slate-500 py-6">Powered by Anto Design Concept &copy; 2026</footer>
 </section>
 
+<!-- C2. ADMIN UTAMA (hanya Registrasi Caleg) -->
+<section id="v-utama" class="hidden min-h-screen flex flex-col">
+  <div class="js-header"></div>
+  <main class="w-full max-w-5xl mx-auto flex-1 p-4 md:px-8 lg:px-10 space-y-5">
+    <div class="flex items-center justify-between">
+      <h2 class="font-bold"><i class="fa-solid fa-user-shield text-blue-700 mr-2"></i>Admin Utama</h2>
+      <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+    <div class="bg-white rounded-2xl shadow overflow-hidden">
+      <div class="bg-gradient-to-br from-blue-600 to-blue-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-user-plus mr-2"></i>Registrasi Caleg</h2></div>
+      <div class="px-4 py-4">
+        <div class="md:flex md:flex-row-reverse md:items-center md:gap-3 md:mb-3">
+          <button class="btn w-full md:w-auto md:whitespace-nowrap" onclick="formCaleg()"><i class="fa-solid fa-plus mr-1"></i>Registrasi Caleg</button>
+          <div class="relative my-3 md:my-0 md:flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input id="cariCaleg" class="inp pl-9" placeholder="Cari caleg (nama, no. HP, email, dapil, partai)" oninput="renderUtama()"></div>
+        </div>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>Foto</th><th>Nama</th><th>No. HP</th><th>Email</th><th>Dapil</th><th>Partai</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="calegBody"></tbody></table></div>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center text-xs text-slate-500 py-6">Powered by Anto Design Concept &copy; 2026</footer>
+</section>
+
 <!-- D. USER -->
 <section id="v-user" class="hidden min-h-screen flex flex-col">
   <div class="js-header"></div>
@@ -287,7 +316,7 @@
         <div class="relative flex-1 min-w-0">
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input id="cariData" class="inp pl-9" placeholder="Cari data (nama, NIK, kelurahan, hubungan)" oninput="renderUser()"></div>
-        <button type="button" class="btn whitespace-nowrap" style="background:#475569" onclick="bukaHistory()" title="Data yang dihapus admin" aria-label="History"><i class="fa-solid fa-clock-rotate-left md:mr-1"></i><span class="hidden md:inline">History</span></button>
+        <button type="button" class="btn whitespace-nowrap" style="background:#475569" onclick="bukaHistory()" title="Data yang dihapus caleg" aria-label="History"><i class="fa-solid fa-clock-rotate-left md:mr-1"></i><span class="hidden md:inline">History</span></button>
         <button type="button" class="btn btn-b whitespace-nowrap" onclick="cetakUser()" title="Unduh pdf" aria-label="Unduh pdf"><i class="fa-solid fa-file-pdf md:mr-1"></i><span class="hidden md:inline">Unduh pdf</span></button>
       </div>
       <div id="wrapData" class="tbl-wrap tbl-scroll mt-3"><table class="tbl tbl-v">
@@ -322,6 +351,9 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function rpc(fn, args) { const { data, error } = await sb.rpc(fn, args); if (error) throw error; return data; }
 let S = JSON.parse(sessionStorage.getItem('sidak') || 'null');
+if (S && S.role === 'admin') { S = null; sessionStorage.removeItem('sidak'); }   // peran lama (admin) kini Caleg; sesi lama tidak dipakai
+// Kredensial untuk RPC Caleg (halaman Caleg memakai fungsi admin_* yang dibatasi per caleg)
+function ap() { return { p_id: S.id, p_pass: S.pass }; }
 let ADATA = [], UDATA = [], PROFIL = null;
 
 document.querySelectorAll('.js-logo').forEach(i => i.src = LOGO_URL);
@@ -345,10 +377,12 @@ function tick() {
 tick(); setInterval(tick, 60000);
 
 /* ---------- Navigasi ---------- */
-function show(v) { ['login','admin','user'].forEach(x => $('v-'+x).classList.toggle('hidden', x !== v)); }
+function show(v) { ['login','admin','user','utama'].forEach(x => $('v-'+x).classList.toggle('hidden', x !== v)); }
 function start(sess) {
   S = sess; sessionStorage.setItem('sidak', JSON.stringify(S));
-  if (S.role === 'admin') { show('admin'); loadAdmin(); subscribeAdmin(); pasangBack(); } else { show('user'); loadUser(); subscribeUser(); pasangBack(); }
+  if (S.role === 'utama') { show('utama'); loadUtama(); pasangBack(); }
+  else if (S.role === 'caleg') { show('admin'); loadCaleg(); loadAdmin(); subscribeAdmin(); pasangBack(); pilihFiturAdmin('diri', true); }   // Caleg: default Data Diri
+  else { show('user'); loadUser(); subscribeUser(); pasangBack(); pilihFitur('diri', true); }                                              // User: default Data Diri
 }
 function keluar() { sessionStorage.removeItem('sidak'); S = null; location.reload(); }
 
@@ -365,16 +399,32 @@ function msg(t, info) {
   const e = $('loginMsg'); e.textContent = t;
   e.className = 'text-sm min-h-[1.25rem] mb-2 ' + (info ? 'text-slate-500' : 'text-red-600');
 }
-function setRole() {
+let ROLE = '';   // 'caleg' | 'user' | 'utama' (admin utama: klik logo)
+const idValid = v => (ROLE === 'caleg' && v.includes('@')) ? /^\S+@\S+\.\S+$/.test(v) : v.replace(/\D/g, '').length >= 9;
+function resetLogin() {
   ['admin','hp','pass','reg'].forEach(b => $('blk-'+b).classList.add('hidden'));
-  const r = (document.querySelector('input[name="role"]:checked') || {}).value || ''; msg('');
-  cekSeq++; clearTimeout(cekTimer);
-  step = r === 'admin' ? 'admin' : r === 'user' ? 'hp' : '';
-  if (r === 'admin') { $('blk-admin').classList.remove('hidden'); $('pAdmin').focus(); }   // kursor langsung di kolom password
-  if (r === 'user') $('blk-hp').classList.remove('hidden');   // langsung tampil kotak nomor telepon, tanpa tombol Lanjut
-  $('btnMasuk').classList.toggle('hidden', step !== 'admin');
-  $('btnMasuk').textContent = 'Masuk';
-  if (r === 'user') { if ($('hp').value.trim()) cekHp(); else $('hp').focus(); }
+  ['pAdmin','pUser','pReg1','pReg2'].forEach(i => $(i).value = '');
+  cekSeq++; clearTimeout(cekTimer); msg('');
+  $('btnMasuk').classList.add('hidden'); $('btnMasuk').textContent = 'Masuk';
+}
+function setRole() {
+  const r = (document.querySelector('input[name="role"]:checked') || {}).value || '';
+  resetLogin(); ROLE = r; step = r ? 'hp' : '';
+  if (!r) return;
+  const c = r === 'caleg';   // Caleg masuk dengan No. HP atau Email (username)
+  $('lblHp').textContent = c ? 'No. HP atau Email' : 'Nomor Telepon';
+  $('hp').type = c ? 'text' : 'tel'; $('hp').setAttribute('inputmode', c ? 'text' : 'tel');
+  $('hp').placeholder = c ? '08xxxxxxxxxx atau email' : '08xxxxxxxxxx';
+  $('blk-hp').classList.remove('hidden');
+  if ($('hp').value.trim()) cekHp(); else $('hp').focus();
+}
+// Admin utama: klik logo (tanpa tombol) -> hanya kolom password
+function bukaAdminUtama() {
+  if (step === 'admin') { resetLogin(); ROLE = ''; step = ''; return; }   // klik lagi = tutup
+  document.querySelectorAll('input[name="role"]').forEach(r => r.checked = false);
+  resetLogin(); ROLE = 'utama'; step = 'admin';
+  $('blk-admin').classList.remove('hidden'); $('btnMasuk').classList.remove('hidden');
+  $('pAdmin').focus();
 }
 // Nomor diperiksa otomatis: setelah berhenti mengetik, saat keluar dari kotak, atau saat menekan Enter.
 // Hasilnya menentukan kotak yang tampil: password (akun sudah ada) atau password baru + konfirmasi (akun baru).
@@ -386,19 +436,19 @@ function jadwalCekHp() {
     ['pUser','pReg1','pReg2'].forEach(i => $(i).value = '');
     $('btnMasuk').classList.add('hidden'); step = 'hp';
   }
-  if (step !== 'hp' || $('hp').value.replace(/\D/g, '').length < 9) return;
+  if (step !== 'hp' || !idValid($('hp').value.trim())) return;
   cekTimer = setTimeout(cekHp, 700);
 }
 async function cekHp() {
   clearTimeout(cekTimer);
   if (step !== 'hp') return;
   const hp = $('hp').value.trim();
-  if (hp.replace(/\D/g, '').length < 9) return;
+  if (!idValid(hp)) return;
   const saya = ++cekSeq; msg('Memeriksa nomor...', true);
   try {
-    const r = await rpc('cek_login_user', { p_hp: hp });
+    const r = ROLE === 'caleg' ? await rpc('cek_login_caleg', { p_id: hp }) : await rpc('cek_login_user', { p_hp: hp });
     if (saya !== cekSeq || step !== 'hp') return;   // ada ketikan baru: abaikan hasil lama
-    if (r === 'ditolak') return msg('Nomor tidak terdaftar. Hubungi admin untuk didaftarkan.');
+    if (r === 'ditolak') return msg(ROLE === 'caleg' ? 'Akun caleg tidak terdaftar. Hubungi admin utama untuk didaftarkan.' : 'Nomor tidak terdaftar. Hubungi caleg untuk didaftarkan.');
     step = r === 'password' ? 'pass' : 'reg'; msg('');
     $('blk-' + step).classList.remove('hidden');
     $('btnMasuk').classList.remove('hidden');
@@ -412,17 +462,19 @@ async function masuk() {
     if (step === 'admin') {
       const p = $('pAdmin').value;
       if (!p) { $('pAdmin').focus(); return msg('Masukkan password terlebih dahulu.'); }
-      (await rpc('login_admin', { p_pass: p })) ? start({ role:'admin', pass:p }) : msg('Password salah.');
+      (await rpc('login_admin_utama', { p_pass: p })) ? start({ role:'utama', pass:p }) : msg('Password salah.');
     } else if (step === 'pass') {
       const hp = $('hp').value.trim(), p = $('pUser').value;
       if (!p) { $('pUser').focus(); return msg('Masukkan password terlebih dahulu.'); }
-      (await rpc('login_user', { p_hp: hp, p_pass: p })) ? start({ role:'user', hp, pass:p }) : msg('Password salah.');
+      const ok = ROLE === 'caleg' ? await rpc('login_caleg', { p_id: hp, p_pass: p }) : await rpc('login_user', { p_hp: hp, p_pass: p });
+      ok ? start(ROLE === 'caleg' ? { role:'caleg', id:hp, pass:p } : { role:'user', hp, pass:p }) : msg('Password salah.');
     } else if (step === 'reg') {
       const hp = $('hp').value.trim(), p = $('pReg1').value;
       if (!p) { $('pReg1').focus(); return msg('Masukkan password terlebih dahulu.'); }
       if (p.length < 6) return msg('Password minimal 6 karakter.');
       if (p !== $('pReg2').value) return msg('Password tidak sama.');
-      (await rpc('registrasi_user', { p_hp: hp, p_pass: p })) ? start({ role:'user', hp, pass:p }) : msg('Registrasi gagal. Coba masuk ulang.');
+      const ok = ROLE === 'caleg' ? await rpc('registrasi_caleg', { p_id: hp, p_pass: p }) : await rpc('registrasi_user', { p_hp: hp, p_pass: p });
+      ok ? start(ROLE === 'caleg' ? { role:'caleg', id:hp, pass:p } : { role:'user', hp, pass:p }) : msg('Registrasi gagal. Coba masuk ulang.');
     }
   } catch (e) { msg('Terjadi kesalahan: ' + e.message); }
   finally { b.disabled = false; }
@@ -677,7 +729,7 @@ $('navDataV').innerHTML = navBarV('wrapData'); pasangV('wrapData');
 window.addEventListener('resize', () => ['wrapPendata', 'wrapDp', 'wrapKons', 'wrapCetak', 'wrapData'].forEach(id => batasBaris(id)));
 MQ_LEBAR.addEventListener('change', () => {
   if (!S) return;
-  if (S.role !== 'admin') { batasBaris('wrapData'); return; }
+  if (S.role !== 'caleg') { batasBaris('wrapData'); return; }
   if (!MQ_LEBAR.matches) { lihatInlineAktif = false; tutupDetailPendata(); }
   renderKons(); renderLihatInline(); renderPendata();
 });
@@ -740,7 +792,7 @@ function hitungPrioritas() {
 }
 async function loadAdmin(silent) {
   try {
-    ADATA = await rpc('admin_data', { p_pass: S.pass });
+    ADATA = await rpc('admin_data', { ...ap() });
     hitungPrioritas();
     if ($('lihatBody')) renderLihat();
     renderLihatPend();
@@ -814,7 +866,7 @@ function cetakAdmin() {
   printRows('Laporan Data Konstituen - ' + judul, rows, true);
 }
 async function loadPendata() {
-  PEND = await rpc('admin_pendata_list', { p_pass: S.pass });
+  PEND = await rpc('admin_pendata_list', { ...ap() });
   renderPendata();
 }
 function renderPendata() {
@@ -845,7 +897,7 @@ function formPendata() {
     title: 'Tambah Pendata', keys: ['pend_hp', 'pend_nama'],
     onSave: async o => {
       if (PEND.some(x => x.no_hp === norm(o.pend_hp))) throw new Error('Nomor ini sudah terdaftar sebagai pendata.');
-      await rpc('admin_pendata_tambah', { p_pass: S.pass, p_hp: o.pend_hp, p_nama: o.pend_nama || '' });
+      await rpc('admin_pendata_tambah', { ...ap(), p_hp: o.pend_hp, p_nama: o.pend_nama || '' });
       await loadPendata(); toast('Pendata ditambahkan');
     }
   });
@@ -855,7 +907,7 @@ async function resetPw(id) {
   const ok = await konfirmasi({ judul: 'Reset Akun?', tipe: 'peringatan', tombol: 'Ya, reset',
     pesan: 'Akun ' + (p.nama || p.no_hp || 'pendata ini') + ' akan direset. Password lama dihapus dan pendata diminta membuat password baru saat masuk berikutnya.' });
   if (!ok) return;
-  try { await rpc('admin_pendata_reset', { p_pass: S.pass, p_id: id }); await loadPendata(); toast('Akun berhasil direset'); }
+  try { await rpc('admin_pendata_reset', { ...ap(), p_id: id }); await loadPendata(); toast('Akun berhasil direset'); }
   catch (e) { notif(e.message, 'Gagal reset akun'); }
 }
 async function hapusPendata(id) {
@@ -863,7 +915,7 @@ async function hapusPendata(id) {
   const ok = await konfirmasi({ judul: 'Hapus pendata?', tipe: 'bahaya', tombol: 'Ya, hapus',
     pesan: (p.nama || p.no_hp || 'Pendata ini') + ' beserta ' + (p.jumlah || 0) + ' data yang ia input akan dihapus permanen dan tidak bisa dikembalikan.' });
   if (!ok) return;
-  try { await rpc('admin_pendata_hapus', { p_pass: S.pass, p_id: id }); await loadAdmin(true); toast('Pendata berhasil dihapus'); }
+  try { await rpc('admin_pendata_hapus', { ...ap(), p_id: id }); await loadAdmin(true); toast('Pendata berhasil dihapus'); }
   catch (e) { notif(e.message, 'Gagal menghapus pendata'); }
 }
 
@@ -940,9 +992,9 @@ async function hapusData(id) {
       + (d.unggul ? ' Perhatian: data ini memiliki prioritas lebih baik dari data ganda lainnya, hapus hanya bila memang keliru.' : '') });
   if (!ok) return;
   try {
-    try { await rpc('admin_data_hapus_log', { p_pass: S.pass, p_id: id, p_alasan: alasan }); }
+    try { await rpc('admin_data_hapus_log', { ...ap(), p_id: id, p_alasan: alasan }); }
     catch (e) {   // SQL History belum dijalankan: pakai penghapusan lama (tanpa riwayat)
-      if (/Could not find the function|PGRST202/i.test(String(e.message || '') + String(e.code || ''))) await rpc('admin_data_hapus', { p_pass: S.pass, p_id: id });
+      if (/Could not find the function|PGRST202/i.test(String(e.message || '') + String(e.code || ''))) await rpc('admin_data_hapus', { ...ap(), p_id: id });
       else throw e;
     }
     await loadAdmin(true); toast('Data berhasil dihapus');
@@ -950,12 +1002,131 @@ async function hapusData(id) {
 }
 const hapusGanda = id => hapusData(id);
 
-/* ---------- Fitur Utama (admin) ---------- */
+/* ---------- Data Diri Caleg ---------- */
+let CPROF = null;
+async function loadCaleg() {
+  try { CPROF = await rpc('caleg_profil', ap()); if (AFITUR === 'diri') isiDiriCaleg(); }
+  catch (e) { if (String(e.message || '').includes('Akses ditolak')) notif('Sesi tidak valid atau sudah berakhir. Silakan masuk kembali.', 'Sesi berakhir').then(keluar); }
+}
+function isiDiriCaleg() {
+  const p = CPROF, host = $('a-diri'); if (!host) return;
+  const foto = p && p.foto ? `<img src="${esc(p.foto)}" alt="Foto ${esc(p.nama)}" class="w-32 h-32 md:w-40 md:h-40 rounded-2xl object-cover border border-slate-200">`
+    : '<div class="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-4xl"><i class="fa-solid fa-user"></i></div>';
+  const isi = p ? [['Nama', p.nama], ['No. HP', p.no_hp], ['Email', p.email], ['Dapil', p.dapil], ['Partai', p.partai]]
+      .map(([k, v]) => `<dt class="text-slate-500">${k}</dt><dd class="col-span-2 font-semibold break-words">${esc(v || '-')}</dd>`).join('')
+    : '<p class="col-span-3 text-slate-500">Memuat data...</p>';
+  host.innerHTML = `<div class="bg-white rounded-2xl shadow overflow-hidden">
+    <div class="bg-gradient-to-br from-sky-600 to-sky-400 text-white px-4 py-3"><h2 class="font-bold"><i class="fa-solid fa-id-card mr-2"></i>Data Diri</h2></div>
+    <div class="px-4 py-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:gap-6">
+      <div class="shrink-0">${foto}</div>
+      <dl class="grid grid-cols-3 gap-y-3 text-sm w-full">${isi}</dl></div></div>`;
+}
+
+/* ---------- ADMIN UTAMA: Registrasi Caleg ---------- */
+let UCAL = [];
+const normHp = d => { d = String(d || '').replace(/\D/g, ''); return d.startsWith('62') ? '0' + d.slice(2) : d.startsWith('8') ? '0' + d : d; };
+async function loadUtama() {
+  try { UCAL = await rpc('utama_caleg_list', { p_pass: S.pass }) || []; renderUtama(); }
+  catch (e) {
+    if (String(e.message || '').includes('Akses ditolak')) notif('Sesi tidak valid atau sudah berakhir. Silakan masuk kembali.', 'Sesi berakhir').then(keluar);
+    else notif('Gagal memuat data: ' + e.message);
+  }
+}
+function renderUtama() {
+  const q = ($('cariCaleg').value || '').toLowerCase().trim();
+  const list = UCAL.filter(c => !q || [c.nama, c.no_hp, c.email, c.dapil, c.partai].some(v => String(v || '').toLowerCase().includes(q)));
+  const foto = c => c.foto ? `<img src="${esc(c.foto)}" alt="" class="w-10 h-10 rounded-lg object-cover">`
+    : '<span class="inline-flex w-10 h-10 rounded-lg bg-slate-100 items-center justify-center text-slate-400"><i class="fa-solid fa-user"></i></span>';
+  const badge = c => c.sudah_registrasi
+    ? '<span role="img" aria-label="Aktif" title="Aktif">✅</span>' : '<span role="img" aria-label="Belum registrasi" title="Belum registrasi">❌</span>';
+  $('calegBody').innerHTML = list.length
+    ? list.map(c => `<tr><td>${foto(c)}</td><td class="font-semibold">${esc(c.nama)}</td><td class="tabular-nums whitespace-nowrap">${esc(c.no_hp)}</td>
+        <td>${esc(c.email)}</td><td class="whitespace-nowrap">${esc(c.dapil)}</td><td>${esc(c.partai)}</td><td class="whitespace-nowrap">${badge(c)}</td>
+        <td class="whitespace-nowrap"><button type="button" class="ba ba-y" onclick="resetCaleg('${c.id}')" title="Reset akun"><i class="fa-solid fa-key mr-1"></i>Reset</button><button type="button" class="ba ba-r" onclick="hapusCaleg('${c.id}')" title="Hapus caleg"><i class="fa-solid fa-trash-can mr-1"></i>Hapus</button></td></tr>`).join('')
+    : `<tr><td colspan="8" class="text-slate-500">${q ? 'Tidak ada caleg yang cocok dengan pencarian.' : 'Belum ada caleg. Tekan Registrasi Caleg untuk mendaftarkan.'}</td></tr>`;
+}
+// Foto dipangkas persegi dan dikecilkan (320 px) agar ringan disimpan
+function bacaFoto(file) {
+  return new Promise((ok, gagal) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const s = Math.min(img.width, img.height), c = document.createElement('canvas'); c.width = c.height = 320;
+      c.getContext('2d').drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 320, 320);
+      URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', .85));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); gagal(new Error('File bukan gambar yang valid.')); };
+    img.src = url;
+  });
+}
+function formCaleg() {
+  const m = $('modal'); let foto = '';
+  m.innerHTML = `<form class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-5 space-y-3">
+    <div class="flex justify-between items-center"><h3 class="font-bold text-lg">Registrasi Caleg</h3><button type="button" data-x class="text-slate-500 text-xl">&times;</button></div>
+    <div><label class="text-sm font-semibold">Foto</label>
+      <div class="flex items-center gap-3 mt-1"><div id="cFotoPrev" class="w-20 h-20 shrink-0 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 overflow-hidden"><i class="fa-solid fa-user text-2xl"></i></div>
+      <input id="cFoto" type="file" accept="image/*" class="text-sm flex-1 min-w-0"></div></div>
+    <div><label class="text-sm font-semibold">Nama</label><input name="nama" class="inp" required></div>
+    <div><label class="text-sm font-semibold">No. HP</label><input name="no_hp" type="text" inputmode="numeric" oninput="angka(this)" maxlength="15" pattern="\\d{9,15}" title="No. HP hanya angka, 9 sampai 15 digit" class="inp" required></div>
+    <div><label class="text-sm font-semibold">Email (username)</label><input name="email" type="email" class="inp" required></div>
+    <div><label class="text-sm font-semibold">Daerah Pemilihan</label>
+      <select name="dapil_pilih" class="inp" required><option value="">Pilih...</option><option>Kadia/Wua-Wua</option><option value="__lain">Lainnya...</option></select>
+      <input name="dapil_lain" class="inp mt-2 hidden" placeholder="Tulis daerah pemilihan"></div>
+    <div><label class="text-sm font-semibold">Partai</label><input name="partai" class="inp" required></div>
+    <p data-msg class="text-sm text-red-600"></p>
+    <button class="btn w-full">Simpan</button></form>`;
+  m.classList.remove('hidden'); m.classList.add('flex');
+  const f = m.querySelector('form'), msgEl = f.querySelector('[data-msg]');
+  f.querySelector('[data-x]').onclick = closeForm;
+  f.elements['dapil_pilih'].onchange = () => {
+    const lain = f.elements['dapil_pilih'].value === '__lain', el = f.elements['dapil_lain'];
+    el.classList.toggle('hidden', !lain); el.required = lain; if (lain) el.focus(); else el.value = '';
+  };
+  $('cFoto').onchange = async e => {
+    const file = e.target.files[0]; msgEl.textContent = ''; foto = '';
+    if (!file) { $('cFotoPrev').innerHTML = '<i class="fa-solid fa-user text-2xl"></i>'; return; }
+    try { foto = await bacaFoto(file); $('cFotoPrev').innerHTML = `<img src="${foto}" alt="" class="w-full h-full object-cover">`; }
+    catch (er) { msgEl.textContent = er.message; e.target.value = ''; $('cFotoPrev').innerHTML = '<i class="fa-solid fa-user text-2xl"></i>'; }
+  };
+  f.onsubmit = async e => {
+    e.preventDefault(); msgEl.textContent = '';
+    const o = Object.fromEntries(new FormData(f).entries());
+    ['nama', 'no_hp', 'email', 'dapil_lain', 'partai'].forEach(k => { if (typeof o[k] === 'string') o[k] = o[k].trim(); });
+    const dapil = o.dapil_pilih === '__lain' ? o.dapil_lain : o.dapil_pilih;
+    if (!foto) return msgEl.textContent = 'Foto wajib diisi.';
+    if (!dapil) return msgEl.textContent = 'Daerah pemilihan wajib diisi.';
+    if (UCAL.some(x => x.no_hp === normHp(o.no_hp))) return msgEl.textContent = 'Nomor ini sudah terdaftar sebagai caleg.';
+    if (UCAL.some(x => String(x.email).toLowerCase() === o.email.toLowerCase())) return msgEl.textContent = 'Email ini sudah terdaftar sebagai caleg.';
+    const b = f.querySelector('button:not([type])'); b.disabled = true;
+    try {
+      await rpc('utama_caleg_tambah', { p_pass: S.pass, p_nama: o.nama, p_hp: o.no_hp, p_email: o.email, p_dapil: dapil, p_partai: o.partai, p_foto: foto });
+      await loadUtama(); closeForm(); toast('Caleg didaftarkan');
+    } catch (er) { msgEl.textContent = 'Gagal menyimpan: ' + (er.message || ''); b.disabled = false; }
+  };
+}
+async function resetCaleg(id) {
+  const c = UCAL.find(x => x.id === id) || {};
+  const ok = await konfirmasi({ judul: 'Reset Akun?', tipe: 'peringatan', tombol: 'Ya, reset',
+    pesan: 'Akun ' + (c.nama || 'caleg ini') + ' akan direset. Password lama dihapus dan caleg diminta membuat password baru saat masuk berikutnya.' });
+  if (!ok) return;
+  try { await rpc('utama_caleg_reset', { p_pass: S.pass, p_id: id }); await loadUtama(); toast('Akun berhasil direset'); }
+  catch (e) { notif(e.message, 'Gagal reset akun'); }
+}
+async function hapusCaleg(id) {
+  const c = UCAL.find(x => x.id === id) || {};
+  const ok = await konfirmasi({ judul: 'Hapus caleg?', tipe: 'bahaya', tombol: 'Ya, hapus',
+    pesan: (c.nama || 'Caleg ini') + ' akan dihapus permanen dan tidak bisa dikembalikan.' });
+  if (!ok) return;
+  try { await rpc('utama_caleg_hapus', { p_pass: S.pass, p_id: id }); await loadUtama(); toast('Caleg berhasil dihapus'); }
+  catch (e) { notif(e.message, 'Gagal menghapus caleg'); }
+}
+
+/* ---------- Fitur Utama (Caleg) ---------- */
 let AFITUR = '';
-function pilihFiturAdmin(k) {
+function pilihFiturAdmin(k, tanpaScroll) {
   AFITUR = AFITUR === k ? '' : k;
   if (AFITUR !== 'kelola' && DPEND) tutupDetailPendata();
-  ['kelola', 'kons', 'statistik', 'cetak'].forEach(x => $('a-' + x).classList.toggle('hidden', x !== AFITUR));
+  ['diri', 'kelola', 'kons', 'statistik', 'cetak'].forEach(x => $('a-' + x).classList.toggle('hidden', x !== AFITUR));
+  if (AFITUR === 'diri') isiDiriCaleg(); else $('a-diri').innerHTML = '';
   document.querySelectorAll('#v-admin [data-fitur]').forEach(b => {
     const on = b.dataset.fitur === AFITUR;
     b.classList.toggle('aktif', on); b.setAttribute('aria-pressed', String(on));
@@ -966,7 +1137,7 @@ function pilihFiturAdmin(k) {
   if (AFITUR === 'kons') renderKons();
   if (AFITUR !== 'cetak') { lihatInlineAktif = false; renderLihatInline(); }
   requestAnimationFrame(() => ['wrapPendata', 'wrapDp', 'wrapKons', 'wrapCetak'].forEach(id => batasBaris(id)));
-  if (AFITUR) $('a-' + AFITUR).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (AFITUR && !tanpaScroll) $('a-' + AFITUR).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /* ---------- Data Konstituen (admin) ---------- */
@@ -1218,7 +1389,7 @@ const SHEETS = {
         `<div class="chart-col"><span id="jv-${k}" class="text-xl font-extrabold mb-1">0</span><div id="jb-${k}" class="bar" style="background:${c}"></div></div>`).join('')}</div>
       <div class="flex gap-4 px-2 mt-2">${JUMLAH.map(([, lb, ic, c]) =>
         `<div class="flex-1 text-center text-xs font-semibold text-slate-600"><i class="fa-solid ${ic} text-base block mb-0.5" style="color:${c}"></i>${lb}</div>`).join('')}</div>
-      <p class="text-xs text-slate-500 mt-4">Data ganda hanya bisa dilihat. Penanganannya oleh admin.</p>`,
+      <p class="text-xs text-slate-500 mt-4">Data ganda hanya bisa dilihat. Penanganannya oleh caleg.</p>`,
     init: () => setTimeout(isiJumlah, 280)   // batang tumbuh saat modal hampir selesai naik
   },
   statistik: {
@@ -1361,12 +1532,12 @@ async function muatHistory() {
   try { HIST = (await rpc('user_history', ua())) || []; renderHistory(); }
   catch (e) {
     const belum = /Could not find the function|PGRST202/i.test(String(e.message || '') + String(e.code || ''));
-    if ($('histBody')) $('histBody').innerHTML = `<p class="text-sm text-red-600">${belum ? 'Fitur History belum aktif di database. Hubungi admin.' : 'Gagal memuat History: ' + esc(e.message)}</p>`;
+    if ($('histBody')) $('histBody').innerHTML = `<p class="text-sm text-red-600">${belum ? 'Fitur History belum aktif di database. Hubungi caleg.' : 'Gagal memuat History: ' + esc(e.message)}</p>`;
   }
 }
 function renderHistory() {
   const el = $('histBody'); if (!el) return;
-  if (!HIST.length) { el.innerHTML = '<p class="text-slate-500 text-sm">Belum ada data yang dihapus admin.</p>'; return; }
+  if (!HIST.length) { el.innerHTML = '<p class="text-slate-500 text-sm">Belum ada data yang dihapus caleg.</p>'; return; }
   const tgl = s => s ? new Date(s).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
   el.innerHTML = `<div class="tbl-wrap tbl-scroll"><table class="tbl tbl-v whitespace-nowrap">
     <thead><tr><th>Nama</th><th>Tgl hapus</th><th>Alasan</th></tr></thead>
@@ -1385,7 +1556,7 @@ async function restoreHistory(id) {
 
 /* Seksi di halaman: Pendataan dan Data Konstituen (tekan lagi untuk menutup) */
 let FITUR = '';
-function pilihFitur(k) {
+function pilihFitur(k, tanpaScroll) {
   FITUR = FITUR === k ? '' : k;
   ['diri', 'jumlah', 'pendataan', 'data'].forEach(x => $('sec-' + x).classList.toggle('hidden', x !== FITUR));
   document.querySelectorAll('#v-user [data-fitur]').forEach(b => {
@@ -1399,7 +1570,7 @@ function pilihFitur(k) {
   if (FITUR === 'pendataan') formPendataan();
   if (FITUR === 'data') renderUser();
   requestAnimationFrame(() => batasBaris('wrapData'));
-  if (FITUR) $('sec-' + FITUR).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (FITUR && !tanpaScroll) $('sec-' + FITUR).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 function formPendataan() {
   openForm({
