@@ -1512,8 +1512,8 @@ const SHEETS = {
       <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
         <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
         ${donutHTML('u', DONUT_SEG, true)}
-      </div></div>
-      <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>`,
+        <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>
+      </div></div>`,
     init: () => setTimeout(isiJumlah, 280)   // grafik tumbuh saat modal hampir selesai naik
   },
   statistik: {
@@ -1527,6 +1527,7 @@ const SHEETS = {
       <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
         <h4 class="font-bold text-sm mb-3">Keadaan Data</h4>
         ${donutHTML('s', DONUT_SEG, true)}
+        <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>
       </div>
       <div class="mt-6 pt-6 border-t border-slate-200 md:mt-0 md:pt-0 md:border-t-0 md:border-l md:pl-8">
       <h4 class="font-bold text-sm mb-3">Data Potensial</h4>
@@ -1534,14 +1535,14 @@ const SHEETS = {
         `<div class="chart-col"><span id="spv-${k}" class="text-xs font-extrabold mb-1 whitespace-nowrap">0 (0,0%)</span><div id="spb-${k}" class="bar" style="background:${c}"></div></div>`).join('')}</div>
       <div class="flex gap-4 px-2 mt-2">${STAT_POT.map(([k, ic, c]) =>
         `<div class="flex-1 text-center text-xs font-semibold text-slate-600"><i class="fa-solid ${ic} text-base block mb-0.5" style="color:${c}"></i>${k}</div>`).join('')}</div>
-      </div></div>
-      <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>`,
+      </div></div>`,
     init: () => setTimeout(isiStatistik, 280)
   },
   pendata: {
     judul: 'Rincian Pendata', ikon: 'fa-user-gear',
     body: () => `<p id="pdNama" class="text-center font-extrabold text-lg mb-5"></p>
-      ${donutHTML('p')}`,
+      ${donutHTML('p')}
+      <p class="text-xs text-slate-500 mt-4">Anomali: Data ganda dari Caleg berbeda.</p>`,
     foot: `<div class="grid grid-cols-3 gap-2">
       <button type="button" class="rounded-xl bg-red-600 hover:bg-red-700 text-white py-2.5 flex flex-col items-center gap-1 text-xs font-bold" onclick="hapusPendata(PSEL)"><i class="fa-solid fa-trash-can text-base"></i>Hapus Pendata</button>
       <button type="button" class="rounded-xl bg-amber-400 hover:bg-amber-500 text-amber-950 py-2.5 flex flex-col items-center gap-1 text-xs font-bold" onclick="resetPw(PSEL)"><i class="fa-solid fa-key text-base"></i>Reset Akun</button>
