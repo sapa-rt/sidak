@@ -146,6 +146,15 @@
   .fitur.aktif .fitur-lb{color:#1d4ed8}
   .fitur-ic{width:2.75rem;height:2.75rem;border-radius:.9rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;box-shadow:0 3px 8px #0f172a26}
   .fitur-lb{font-size:.7rem;font-weight:700;color:#334155;text-align:center;line-height:1.2}
+  /* Halaman User tablet/PC: tombol Fitur Utama (25%) dan kartu (75%) sebaris; HP tetap bertumpuk */
+  @media (min-width:768px){
+    #v-user .u-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:1.5rem;align-items:start}
+    #v-user .u-fitur{position:sticky;top:1rem}
+    #v-user .u-konten{min-width:0}
+    #v-user .fitur-grid{grid-template-columns:1fr;gap:.5rem}
+    #v-user .fitur-grid .fitur{flex-direction:row;justify-content:flex-start;gap:.75rem;padding:.6rem .75rem;text-align:left}
+    #v-user .fitur-grid .fitur-lb{text-align:left}
+  }
   /* Modal dari bawah (bottom sheet) */
   .sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;visibility:hidden;transition:visibility 0s linear .5s}
   .sheet.open{visibility:visible;transition-delay:0s}
@@ -325,12 +334,13 @@
   <div class="js-header"></div>
   <main class="w-full flex-1 p-4 md:px-6 lg:px-8 space-y-7">
     <div class="md:hidden flex items-center gap-2 text-slate-600 font-semibold -mb-3"><i class="fa-regular fa-calendar text-blue-700"></i><span class="js-date"></span></div>
-    <div>
+    <div class="u-split space-y-7 md:space-y-0">
+    <div class="u-fitur">
       <div class="flex items-center justify-between mb-2">
         <h2 class="font-bold"><i class="fa-solid fa-table-cells-large text-blue-700 mr-2"></i>Fitur Utama</h2>
         <button type="button" class="w-9 h-9 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i></button>
       </div>
-      <div class="grid grid-cols-4 gap-1.5">
+      <div class="grid grid-cols-4 gap-1.5 fitur-grid">
         <button type="button" class="fitur" data-fitur="diri" aria-pressed="false" onclick="pilihFitur('diri')"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-id-card"></i></span><span class="fitur-lb">Data Diri</span></button>
         <button type="button" class="fitur" data-fitur="jumlah" aria-pressed="false" onclick="pilihFitur('jumlah')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-simple"></i></span><span class="fitur-lb">Statistik</span></button>
         <button type="button" class="fitur" data-fitur="pendataan" aria-pressed="false" onclick="pilihFitur('pendataan')"><span class="fitur-ic bg-gradient-to-br from-green-700 to-green-500"><i class="fa-solid fa-user-plus"></i></span><span class="fitur-lb">Pendataan</span></button>
@@ -338,6 +348,7 @@
       </div>
     </div>
 
+    <div class="u-konten space-y-7">
     <section id="sec-diri" class="hidden"></section>
 
     <section id="sec-jumlah" class="hidden"></section>
@@ -363,6 +374,8 @@
         <tbody id="dataBody"></tbody></table></div>
       <div class="hidden md:flex mt-2 items-center justify-end"><div id="navDataV"></div></div>
     </div></div></section>
+    </div>
+    </div>
   </main>
   <footer class="text-center text-xs text-slate-500 py-6">Powered by Anto Design Concept &copy; 2026</footer>
 </section>
