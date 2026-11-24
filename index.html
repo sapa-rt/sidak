@@ -1989,19 +1989,23 @@ async function printRows(title, rows, withPendata, filter = '') {
     : [[{ content: 'Tidak ada data', colSpan: head.length, styles: { halign: 'center' } }]];
   // Foto + nama caleg di sisi kanan dokumen (halaman pertama)
   const cp = S && S.role === 'caleg' ? CPROF : S && S.role === 'user' ? UHDR : null;
-  let yKanan = 0;
+  let yKanan = 0, yDasar = 0;   // yDasar = garis dasar baris terakhir blok kanan (foto/nama)
   if (cp && (cp.nama || cp.foto)) {
     const img = await fotoUntukPdf(cp.foto); let yy = 8;
-    if (img) { try { doc.addImage(img, /^data:image\/png/.test(img) ? 'PNG' : 'JPEG', 287 - 18, yy, 18, 18); yy += 20; } catch (_) {} }
+    if (img) { try { doc.addImage(img, /^data:image\/png/.test(img) ? 'PNG' : 'JPEG', 287 - 18, yy, 18, 18); yy += 20; yDasar = yy - 2; } catch (_) {} }
     if (cp.nama) {
       doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(20);
       const nm = doc.splitTextToSize(String(cp.nama), 55); doc.text(nm, 287, yy + 3, { align: 'right' }); yy += 3 + nm.length * 4;
+      yDasar = yy - 4;
     }
     yKanan = yy + 2;
   }
   const judul = doc.splitTextToSize(title, yKanan ? 235 : 270);
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(20); doc.text(judul, 15, 15);
-  const y = 15 + (judul.length - 1) * 6;
+  // Teks judul + info rata bawah dengan foto/nama di kanan, agar jarak ke tabel tidak jauh
+  let yJudul = 15;
+  if (yDasar) yJudul = Math.max(12, yDasar - 5.5 - (judul.length - 1) * 6);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(20); doc.text(judul, 15, yJudul);
+  const y = yJudul + (judul.length - 1) * 6;
   doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(90);
   doc.text('SIDAK - Dicetak ' + new Date().toLocaleString('id-ID') + ' - Total ' + rows.length + ' data', 15, y + 5.5);
   doc.autoTable({
