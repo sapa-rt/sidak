@@ -157,6 +157,13 @@
     #v-user .fitur-grid .fitur{flex-direction:row;justify-content:flex-start;gap:.75rem;padding:.6rem .75rem;text-align:left}
     #v-user .fitur-grid .fitur-lb{text-align:left}
   }
+  /* Halaman Caleg PC/tablet: Data Caleg jadi tombol pertama Fitur Utama (5 tombol sebaris); HP tetap di baris judul */
+  #v-admin .fitur-diri{display:none}
+  @media (min-width:768px){
+    #v-admin .fitur-diri{display:flex}
+    #v-admin .ic-diri{display:none}
+    #v-admin .fitur-grid-a{grid-template-columns:repeat(5,minmax(0,1fr))}
+  }
   /* Logo splash: lebih besar di tablet/PC (HP tetap) */
   @media (min-width:768px){#logoSplash{width:min(17rem,45vh);height:min(17rem,45vh)}}
   @media (min-width:1024px){#logoSplash{width:min(21rem,50vh);height:min(21rem,50vh)}}
@@ -229,7 +236,8 @@
           <button type="button" class="w-9 h-9 md:w-auto md:px-3 gap-1.5 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center" onclick="tanyaKeluar()" title="Keluar" aria-label="Keluar"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden md:inline text-sm font-semibold">Keluar</span></button>
         </div>
       </div>
-      <div class="grid grid-cols-4 gap-1.5">
+      <div class="grid grid-cols-4 gap-1.5 fitur-grid-a">
+        <button type="button" class="fitur fitur-diri" data-fitur="diri" aria-pressed="false" onclick="pilihFiturAdmin('diri')" title="Data Calon Legislatif" aria-label="Data Calon Legislatif"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-id-card"></i></span><span class="fitur-lb">Data Caleg</span></button>
         <button type="button" class="fitur" data-fitur="kelola" aria-pressed="false" onclick="pilihFiturAdmin('kelola')"><span class="fitur-ic bg-gradient-to-br from-blue-600 to-blue-400"><i class="fa-solid fa-users-gear"></i></span><span class="fitur-lb">Kelola Pendata</span></button>
         <button type="button" class="fitur" data-fitur="kons" aria-pressed="false" onclick="pilihFiturAdmin('kons')"><span class="fitur-ic bg-gradient-to-br from-indigo-600 to-indigo-400"><i class="fa-solid fa-table-list"></i></span><span class="fitur-lb">Data Konstituen</span></button>
         <button type="button" class="fitur" data-fitur="statistik" aria-pressed="false" onclick="pilihFiturAdmin('statistik')"><span class="fitur-ic bg-gradient-to-br from-amber-600 to-amber-400"><i class="fa-solid fa-chart-pie"></i></span><span class="fitur-lb">Statistik Data</span></button>
