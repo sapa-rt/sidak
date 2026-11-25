@@ -148,13 +148,18 @@
   .fitur-lb{font-size:.7rem;font-weight:700;color:#334155;text-align:center;line-height:1.2}
   /* Halaman User tablet/PC: tombol Fitur Utama (25%) dan kartu (75%) sebaris; HP tetap bertumpuk */
   @media (min-width:768px){
-    #v-user .u-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:1.5rem;align-items:start}
-    #v-user .u-fitur{position:sticky;top:1rem}
-    #v-user .u-konten{min-width:0}
+    #v-user .u-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);column-gap:1.5rem;row-gap:.5rem;align-items:start}
+    #v-user .u-fitur{display:contents}
+    #v-user .u-fitur>div:first-child{grid-column:1 / -1;grid-row:1;margin-bottom:0}
+    #v-user .fitur-grid{grid-column:1;grid-row:2;position:sticky;top:1rem}
+    #v-user .u-konten{grid-column:2;grid-row:2;min-width:0}
     #v-user .fitur-grid{grid-template-columns:1fr;gap:.5rem}
     #v-user .fitur-grid .fitur{flex-direction:row;justify-content:flex-start;gap:.75rem;padding:.6rem .75rem;text-align:left}
     #v-user .fitur-grid .fitur-lb{text-align:left}
   }
+  /* Logo splash: lebih besar di tablet/PC (HP tetap) */
+  @media (min-width:768px){#logoSplash{width:min(17rem,45vh);height:min(17rem,45vh)}}
+  @media (min-width:1024px){#logoSplash{width:min(21rem,50vh);height:min(21rem,50vh)}}
   /* Modal dari bawah (bottom sheet) */
   .sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center;visibility:hidden;transition:visibility 0s linear .5s}
   .sheet.open{visibility:visible;transition-delay:0s}
